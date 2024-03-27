@@ -9,5 +9,5 @@ public interface IGameRepository {
     public void Post(Game game);
     // public void Update(int id, Game game);
     public void Delete(int id);
-    public IQueryable<Game> GetAllByUserId(int id);
+    // public IQueryable<Game> GetAllByUserId(int id);
 }

@@ -2,12 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using MyGames.Models;
 
 public class MyGamesDbContext : DbContext {
-    public DbSet<User> Products { get; set; }
-    public DbSet<Game> Users { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Game> Games { get; set; }
 
     public MyGamesDbContext()
     {
-       this.Database.EnsureCreated();
+    //    this.Database.EnsureCreated();
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -18,7 +18,9 @@ public class MyGamesDbContext : DbContext {
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
+        modelBuilder.Entity<Game>()
+        .HasIndex(g => g.Name)
+        .IsUnique();
 
         base.OnModelCreating(modelBuilder);
     }

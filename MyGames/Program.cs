@@ -2,12 +2,13 @@
 
 using System.Net;
 using System.Text.Json;
+using MyGames.Controllers;
 using MyGames.Models;
 using MyGames.Repositories.EF_Core;
 
 public class Program
 {
-    public async static void Main(string[] args)
+    public async static Task Main(string[] args)
     {
         // GamesEFCoreRep rep = new GamesEFCoreRep();
         // var games = rep.GetAll();
@@ -23,44 +24,19 @@ public class Program
 
         System.Console.WriteLine($"Server started... {prefix.Replace("*", "localhost")}");
 
+        var controller = new GamesController();
 
-//         while (true)
-// {
-//     var client = await httpListener.GetContextAsync();
+        while (true){
 
-//     string? endpoint = client.Request.RawUrl;
+            var client = await httpListener.GetContextAsync();
 
-//     switch (endpoint)
-//     {
-//         case "/":
-//             {
-//                 await WriteViewAsync(client.Response, "index");
-//                 break;
-//             }
-//         case "/Users":
-//             {
-//                 var usersJson = await File.ReadAllTextAsync("users.json");
-//                 var users = JsonSerializer.Deserialize<IEnumerable<User>>(usersJson);
-                
-//                 if(users is not null && users.Any()) {
-//                     var html = users.AsHtml();
-//                     await LayoutAsync(client.Response, html);
-//                 }
-//                 else {
-//                     await NotFoundAsync(client.Response, nameof(users));
-//                 }
+            string? endpoint = client.Request.RawUrl;
 
-//                 break;
-//             }
-//         default:
-//             {
-//                 await NotFoundAsync(client.Response, endpoint!);
+            if(endpoint == "/Users") {
+                controller.RequestVerifier(client);
+            }
 
-//                 break;
-//             }
-//     }
-
-//     client.Response.Close();
-// }
+            client.Response.Close();
+        }
     }
 }

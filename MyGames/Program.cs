@@ -10,13 +10,6 @@ public class Program
 {
     public async static Task Main(string[] args)
     {
-        // GamesEFCoreRep rep = new GamesEFCoreRep();
-        // var games = rep.GetAll();
-
-        // foreach(var game in games) {
-        //     System.Console.WriteLine(game.Name);
-        // }
-
         var httpListener = new HttpListener();
         var prefix = "http://*:8080/";
         httpListener.Prefixes.Add(prefix);
@@ -33,7 +26,7 @@ public class Program
             string? endpoint = client.Request.RawUrl;
 
             if(endpoint == "/Users") {
-                controller.RequestVerifier(client);
+                controller.Index(client);
             }
 
             client.Response.Close();

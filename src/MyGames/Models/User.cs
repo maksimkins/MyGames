@@ -1,11 +1,15 @@
 
+using System.Text.Json.Serialization;
+
 namespace MyGames.Models;
 
-#pragma warning disable 
 public class User {
-
+    [JsonPropertyName("id")]
     public int Id { get; set; }
-    public string Name {set; get;}
-    public string Surname{set; get;}
-    public DateTime Birthdate {set; get;}
+    [JsonPropertyName("name")]
+    public string? Name {set; get;}
+    [JsonPropertyName("surname")]
+    public string? Surname{set; get;}
+    [JsonPropertyName("birthdate")]
+    public DateTime? Birthdate {set; get;}
 }

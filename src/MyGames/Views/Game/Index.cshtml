@@ -1,0 +1,26 @@
+@{
+    ViewData["Title"] = "Games";
+
+    var gamesStr = File.ReadAllText("../../src/MyGames/json/Games.json");
+    var games = JsonSerializer.Deserialize<IEnumerable<Game>>(gamesStr); 
+
+}
+
+<div class="index-game">
+    @if(games is not null)
+    foreach(var game in games){
+        <div class="game">
+            <div>name: "@game.Name"</div>
+            <div>price: "@game.Price"</div>
+            <br>
+        </div>
+    }
+</div>
+
+<form action="/Game">
+    <input type="text" name="Name">
+    @* <input type="text" name="Price"> *@
+
+    <button>Create</button>
+
+</form>

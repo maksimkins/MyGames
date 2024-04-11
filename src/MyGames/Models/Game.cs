@@ -1,9 +1,13 @@
 
+using System.Text.Json.Serialization;
+
 namespace MyGames.Models;
 
-#pragma warning disable 
 public class Game {
+    [JsonPropertyName("id")]
     public int Id { get; set; }
-    public string Name {set; get;}
-    public decimal Price{set; get;}
+    [JsonPropertyName("name")]
+    public string? Name {set; get;}
+    [JsonPropertyName("price")]
+    public decimal? Price{set; get;}
 }

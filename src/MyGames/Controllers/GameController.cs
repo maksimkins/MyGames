@@ -14,17 +14,25 @@ public class GameController : Controller {
         _logger = logger;
     }
 
-    [HttpGet]
+    
     [Route("[controller]")]
+    [ActionName("Index")]
+    [HttpGet]
     public IActionResult Index ()
     {
+        // System.Console.WriteLine("index");
         return View();
     }
 
-    [HttpPost]
+    
     [Route("[controller]")]
+    [HttpPost]
     public async Task<IActionResult> CreateGame(GameDto newGame) {
-        
+
+        if(newGame.Name is null || string.IsNullOrWhiteSpace(newGame.Name) || string.IsNullOrEmpty(newGame.Name) || newGame.Price is null) {
+            return BadRequest();
+        }
+ 
         var gamesJSon = await System.IO.File.ReadAllTextAsync("../../src/MyGames/json/Games.json");
 
         var games = JsonSerializer.Deserialize<List<Game>>(gamesJSon, new JsonSerializerOptions {
@@ -33,7 +41,7 @@ public class GameController : Controller {
 
         games?.Add(new Game() {
             Name = newGame.Name,
-            Price = 0
+            Price = newGame.Price,
         });
 
         var resultGamesJson = JsonSerializer.Serialize(games, new JsonSerializerOptions {

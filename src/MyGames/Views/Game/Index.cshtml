@@ -17,9 +17,14 @@
     }
 </div>
 
-<form action="/Game">
-    <input type="text" name="Name">
-    @* <input type="text" name="Price"> *@
+<form action="/Game" method="post">
+    <div>
+        <span>name: </span> <input type="text" name="Name">
+    </div>
+    
+    <div>
+        <span>price: </span> <input type="text" name="Price">
+    </div>
 
     <button>Create</button>
 

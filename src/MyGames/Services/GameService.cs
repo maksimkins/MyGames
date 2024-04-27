@@ -10,18 +10,18 @@ namespace MyGames.Services
 {
     public class GameService : IGameService
     {
-        private readonly IGameRepository gameRepository;
-        public GameService(IGameRepository gameRepository) {
-            this.gameRepository = gameRepository;
+        private readonly IGameRepository repository;
+        public GameService(IGameRepository repository) {
+            this.repository = repository;
         }
         public Task<IEnumerable<Game>> AllGamesAsync()
         {
-            return gameRepository.GetAllAsync();
+            return repository.GetAllAsync();
         }
 
         public Task<Game?> GameByIdAsync(int id)
         {
-            return gameRepository.GetByIdAsync(id);
+            return repository.GetByIdAsync(id);
         }
     }
 }

@@ -7,6 +7,6 @@ namespace MyGames.Repositories.Base.Methods
 {
     public interface IChangeAsync<TEntity>
     {
-        public Task ChangeAsync(TEntity entity);
+        public Task ChangeAsync(int id, TEntity entity);
     }
 }

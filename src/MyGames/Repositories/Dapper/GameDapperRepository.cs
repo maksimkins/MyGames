@@ -17,19 +17,15 @@ namespace MyGames.Repositories.Dapper
             var connection = new SqlConnection(connectionString);
             var games = connection.QueryAsync<Game>(@"select * from Games");
 
-            connection.Dispose();
-
             return games;
         }
 
-        public Task<Game?> GetByIdAsync(int id)
+        public async Task<Game?> GetByIdAsync(int id)
         {
             var connection = new SqlConnection(connectionString);
-            var game = connection.QueryFirstOrDefaultAsync<Game>(@"select * 
+            var game = await connection.QueryFirstOrDefaultAsync<Game>(@"select * 
                                                     from Games 
                                                     where id = @id", id);
-
-            connection.Dispose();
             
             return game;
         }

@@ -14,7 +14,7 @@ namespace MyGames.Repositories.Dapper
 {
     public class CommentDapperRepository : ICommentRepository
     {
-        private const string connectionString = "Database=MyGame;Server=localhost;TrustServerCertificate=True;";
+        private const string connectionString = @"Server=localhost;Database=MyGames;Trusted_Connection=True;TrustServerCertificate=True";
         public async Task ChangeAsync(int id, Comment comment)
         {
             comment.Id = id;

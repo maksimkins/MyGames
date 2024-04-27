@@ -1,8 +1,11 @@
+@using MyGames.Repositories.Dapper
 @{
     ViewData["Title"] = "Games";
 
-    var gamesStr = File.ReadAllText("../../src/MyGames/json/Games.json");
-    var games = JsonSerializer.Deserialize<IEnumerable<Game>>(gamesStr); 
+    var rep = new GameDapperRepository();
+    var games = await rep.GetAllAsync(); 
+
+    Console.WriteLine(games.Any<Game>());
 
 }
 
@@ -23,7 +26,9 @@
     </div>
     
     <div>
-        <span>price: </span> <input type="text" name="Price">
+        <span>price: </
+    using MyGames.Repositories.Dapper;
+
     </div>
 
     <button>Create</button>

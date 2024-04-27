@@ -11,7 +11,7 @@ namespace MyGames.Repositories.Dapper
 {
     public class GameDapperRepository : IGameRepository
     {
-        private const string connectionString = "Database=MyGame;Server=localhost;TrustServerCertificate=True;";
+        private const string connectionString = @"Server=localhost;Database=MyGames;Trusted_Connection=True;TrustServerCertificate=True";
         public Task<IEnumerable<Game>> GetAllAsync()
         {
             var connection = new SqlConnection(connectionString);

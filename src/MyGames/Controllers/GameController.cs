@@ -15,9 +15,7 @@ public class GameController : Controller {
     }
 
     
-    [Route("[controller]")]
-    [ActionName("Index")]
-    [HttpGet]
+    [HttpGet("[controller]")]
     public IActionResult Index ()
     {
         // System.Console.WriteLine("index");
@@ -25,31 +23,31 @@ public class GameController : Controller {
     }
 
     
-    [Route("[controller]")]
-    [HttpPost]
-    public async Task<IActionResult> CreateGame(GameDto newGame) {
+    // [Route("[controller]")]
+    // [HttpPost]
+    // public async Task<IActionResult> CreateGame(GameDto newGame) {
 
-        if(newGame.Name is null || string.IsNullOrWhiteSpace(newGame.Name) || string.IsNullOrEmpty(newGame.Name) || newGame.Price is null) {
-            return BadRequest();
-        }
+    //     if(newGame.Name is null || string.IsNullOrWhiteSpace(newGame.Name) || string.IsNullOrEmpty(newGame.Name) || newGame.Price is null) {
+    //         return BadRequest();
+    //     }
  
-        var gamesJSon = await System.IO.File.ReadAllTextAsync("../../src/MyGames/json/Games.json");
+    //     var gamesJSon = await System.IO.File.ReadAllTextAsync("../../src/MyGames/json/Games.json");
 
-        var games = JsonSerializer.Deserialize<List<Game>>(gamesJSon, new JsonSerializerOptions {
-            PropertyNameCaseInsensitive = true,
-        });
+    //     var games = JsonSerializer.Deserialize<List<Game>>(gamesJSon, new JsonSerializerOptions {
+    //         PropertyNameCaseInsensitive = true,
+    //     });
 
-        games?.Add(new Game() {
-            Name = newGame.Name,
-            Price = newGame.Price,
-        });
+    //     games?.Add(new Game() {
+    //         Name = newGame.Name,
+    //         Price = newGame.Price,
+    //     });
 
-        var resultGamesJson = JsonSerializer.Serialize(games, new JsonSerializerOptions {
-            PropertyNameCaseInsensitive = true,
-        });
+    //     var resultGamesJson = JsonSerializer.Serialize(games, new JsonSerializerOptions {
+    //         PropertyNameCaseInsensitive = true,
+    //     });
 
-        await System.IO.File.WriteAllTextAsync("../../src/MyGames/json/Games.json", resultGamesJson);
+    //     await System.IO.File.WriteAllTextAsync("../../src/MyGames/json/Games.json", resultGamesJson);
 
-        return base.RedirectToAction(actionName: "Index");
-    }
+    //     return base.RedirectToAction(actionName: "Index");
+    // }
 }

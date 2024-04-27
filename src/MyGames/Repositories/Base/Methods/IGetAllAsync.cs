@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace MyGames.Repositories.Base
 {
-    public interface IGetAll<TEntity>
+    public interface IGetAllAsync<TEntity>
     {
-        public IEnumerable<TEntity?> GetAll();
+        public Task<IEnumerable<TEntity>> GetAllAsync();
     }
 }

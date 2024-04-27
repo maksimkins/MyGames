@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace MyGames.Repositories.Base.Methods
 {
-    public interface IDelete<TEntity>
+    public interface IGetByIdAsync<TEntity>
     {
-        public void Delete(TEntity entity);
+        public Task<TEntity> GetByIdAsync(int id);
     }
 }

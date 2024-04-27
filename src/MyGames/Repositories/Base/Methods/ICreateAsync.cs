@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace MyGames.Repositories.Base.Methods
 {
-    public interface IChange<TEntity>
+    public interface ICreateAsync<TEntity>
     {
-        public void Сhange(TEntity entity);
+        public Task CreateAsync(TEntity entity);
     }
 }

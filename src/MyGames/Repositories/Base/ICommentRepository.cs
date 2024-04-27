@@ -7,8 +7,8 @@ using MyGames.Repositories.Base.Methods;
 
 namespace MyGames.Repositories.Base
 {
-    public interface ICommentRepository : ICreate<Comment>
+    public interface ICommentRepository : ICreateAsync<Comment>, IDeleteAsync<Comment>, IChangeAsync<Comment>
     {
-        public IEnumerable<Comment> GetAllByGame(Game? game);
+        public IEnumerable<Comment> GetAllByGame(Game game);
     }
 }

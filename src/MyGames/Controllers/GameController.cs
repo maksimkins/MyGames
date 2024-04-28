@@ -5,7 +5,7 @@ using System.Text.Json;
 using MyGames.Services.Base;
 
 namespace MyGames.Controllers;
-
+[Route("[controller]")]
 public class GameController : Controller {
 
     private readonly IGameService service;
@@ -14,12 +14,33 @@ public class GameController : Controller {
     {
         this.service = service;
     }
-
     
-    [HttpGet("[controller]")]
+    [HttpGet]
     public async Task<IActionResult> Index ()
     {
-        var games = await service.AllGamesAsync();
-        return View(games);
+        try
+        {
+            var games = await service.AllGamesAsync();
+            return View(games);
+        }
+        catch(Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+        
+    }
+
+    [HttpGet("{gameId}")]
+    public async Task<IActionResult> GameInfo(int gameId) 
+    {
+        try
+        {
+            var game = await service.GameByIdAsync(gameId);
+            return View(game);
+        }
+        catch(Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace MyGames.Services
             this.repository = repository;
         }
         public Task<IEnumerable<Game>> AllGamesAsync()
-        {
+        {   
             return repository.GetAllAsync();
         }
 

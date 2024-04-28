@@ -41,12 +41,14 @@ namespace MyGames.Repositories.Dapper
                                         where Id = @Id", comment);
         }
 
-        public async Task<IEnumerable<Comment>> GetAllByGameAsync(Game game)
+        public async Task<IEnumerable<Comment>> GetAllByGameAsync(int gameId)
         {
             var connection = new SqlConnection(connectionString);
             var comments = await connection.QueryAsync<Comment>(@"select *
                                                             from Comments
-                                                            where GameId = @id", game.Id);
+                                                            where GameId = @gameId", new {
+                                                                gameId = gameId
+                                                                });
 
             return comments;
         }

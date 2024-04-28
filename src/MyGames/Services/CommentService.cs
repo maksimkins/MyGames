@@ -29,7 +29,7 @@ namespace MyGames.Services
 
         public async Task CreateCommentAsync(Comment comment)
         {
-            if (comment == null)
+            if (comment == null || comment.GameId == null || comment.Title == null || comment.Text == null)
             {
                 throw new ArgumentNullException(nameof(comment));
             }
@@ -47,14 +47,14 @@ namespace MyGames.Services
             repository.DeleteAsync(comment);
         }
 
-        public Task<IEnumerable<Comment>> GetCommentsByGameAsync(Game game)
+        public Task<IEnumerable<Comment>> GetCommentsByGameAsync(int gameId)
         {
-            if (game == null)
+            if (gameId <= 0)
             {
-                throw new ArgumentNullException(nameof(game));
+                throw new ArgumentNullException(nameof(gameId));
             }
 
-            return repository.GetAllByGameAsync(game);
+            return repository.GetAllByGameAsync(gameId);
         }
     }
 }

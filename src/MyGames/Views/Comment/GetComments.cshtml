@@ -1,0 +1,53 @@
+@model IEnumerable<Comment>;
+@{
+    ViewData["Title"] = "Comments";
+    var gameId = ViewBag.gameId;
+}
+
+<div class="comments-container">
+   <div class="comments d-flex flex-wrap justify-content-between">
+        @if(Model is null ){
+            <div class="alert alert-danger" role="alert">
+                Sorry! There is no comments for this game(
+            </div>
+        }
+        else {
+            <div class="comments d-flex flex-wrap justify-content-between mb-3">
+                @foreach(var comment in Model) {
+                <div class="card " style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">@comment.Title</h5>
+                    <li class="list-group-item mb-2">@comment.Text</li>
+                    @* <a href="/Game/@(comment.Id)" class="btn btn-primary">See Details</a> *@
+                  </div>
+                </div>
+                 }
+            </div>
+                
+            
+            
+           
+
+            <form action="/Comment" method="post">
+                <legend>Write a new comment!!</legend>
+                  <div class="mb-3">
+                    <label for="disabledTextInput" class="form-label">GameId</label>
+                    <input name="GameId" type="text" value="@(gameId is null ? "error" : (int)gameId)">
+                  </div>
+
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Title</label>
+                <input name="Title" type="text" class="form-control">
+              </div>
+
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Text</label>
+                <input name="Text" type="text" class="form-control">
+              </div>
+
+              <button type="submit" class="btn btn-primary">Submit comment</button>
+            </form>
+
+        }
+   </div>
+</div>

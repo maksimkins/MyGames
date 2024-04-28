@@ -1,4 +1,3 @@
-@using MyGames.Repositories.Dapper
 @model IEnumerable<Game>;
 @{
     ViewData["Title"] = "Games";
@@ -16,9 +15,8 @@
                 <div class="card" style="width: 18rem;">
                   <div class="card-body">
                     <h5 class="card-title">@game.Name</h5>
-                    <p class="card-text">@game.Description</p>
                     <li class="list-group-item mb-2">@game.Price $</li>
-                    <a href="#" class="btn btn-primary">See Details</a>
+                    <a href="/Game/@(game.Id)" class="btn btn-primary">See Details</a>
                   </div>
                 </div>
             }
@@ -26,17 +24,3 @@
    </div>
 </div>
 
-@* <form action="/Game" method="post">
-    <div>
-        <span>name: </span> <input type="text" name="Name">
-    </div>
-    
-    <div>
-        <span>price: </
-    using MyGames.Repositories.Dapper;
-
-    </div>
-
-    <button>Create</button>
-
-</form> *@

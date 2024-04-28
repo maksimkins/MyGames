@@ -21,11 +21,13 @@ namespace MyGames.Repositories.Dapper
         }
 
         public async Task<Game?> GetByIdAsync(int id)
-        {
+        { 
             var connection = new SqlConnection(connectionString);
             var game = await connection.QueryFirstOrDefaultAsync<Game>(@"select * 
                                                     from Games 
-                                                    where id = @id", id);
+                                                    where id = @id", new {
+                                                        id = id
+                                                    });
             
             return game;
         }

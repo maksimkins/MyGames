@@ -9,6 +9,6 @@ namespace MyGames.Repositories.Base
 {
     public interface ICommentRepository : ICreateAsync<Comment>, IDeleteAsync<Comment>, IChangeAsync<Comment>
     {
-        public Task<IEnumerable<Comment>> GetAllByGameAsync(Game game);
+        public Task<IEnumerable<Comment>> GetAllByGameAsync(int gameId);
     }
 }

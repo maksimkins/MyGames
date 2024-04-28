@@ -11,6 +11,6 @@ namespace MyGames.Services.Base
         public Task ChangeCommentAsync(int id, Comment comment);
         public Task CreateCommentAsync(Comment comment);
         public Task DeleteCommentAsync(Comment comment);
-        public Task<IEnumerable<Comment>> GetCommentsByGameAsync(Game game);
+        public Task<IEnumerable<Comment>> GetCommentsByGameAsync(int gameId);
     }
 }

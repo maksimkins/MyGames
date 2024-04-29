@@ -17,7 +17,7 @@ namespace MyGames.Controllers
             this.service = service;
         }
 
-        [HttpGet("{gameId}")]
+        [HttpGet("{gameid?}")]
         public async Task<IActionResult> GetComments(int gameId) {
             try
             {
@@ -35,7 +35,7 @@ namespace MyGames.Controllers
         public async Task<IActionResult> CreateComment(Comment comment) {
             try
             {   
-                await service.CreateCommentAsync(comment);
+                service.CreateCommentAsync(comment);
                 return Redirect($"/Game/{comment.GameId}");
             }
             catch(Exception ex)
@@ -44,5 +44,36 @@ namespace MyGames.Controllers
             }
         }
 
+        [Route("[action]/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                Comment comment = new Comment() { Id = id };
+                service.DeleteCommentAsync(comment);
+                return Redirect("/Game");
+
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Put(Comment comment)
+        {
+            try
+            {
+                int gameId = comment.Id is null ? 0 : (int)comment.Id;
+                service.ChangeCommentAsync(gameId, comment);
+                return Redirect($"/Game/{comment.GameId}");
+
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

@@ -23,7 +23,6 @@ namespace MyGames.Services
             {
                 throw new ArgumentNullException(nameof(comment));
             }
-
             repository.ChangeAsync(id, comment);
         }
 

@@ -18,7 +18,42 @@
                   <div class="card-body">
                     <h5 class="card-title">@comment.Title</h5>
                     <li class="list-group-item mb-2">@comment.Text</li>
-                    @* <a href="/Game/@(comment.Id)" class="btn btn-primary">See Details</a> *@
+                    <a href="/Comment/Delete/@(comment.Id)" class="btn btn-primary">delete comment</a>
+                    <div class="dropdown">
+                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                       Change Comment
+                     </button>
+                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                       <li>
+
+                        <form action="/Comment/Put" method="post">
+                          <legend>Change the comment</legend>
+                            <div class="mb-3">
+                              <label for="disabledTextInput" class="form-label">GameId</label>
+                              <input name="GameId" type="text" value="@(gameId is null ? "error" : (int)gameId)">
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="disabledTextInput" class="form-label">comment.Id</label>
+                              <input name="Id" type="text" value="@(comment.Id is null ? "error" : (int)comment.Id)">
+                            </div>
+
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label">Title</label>
+                          <input name="Title" type="text" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="exampleInputPassword1" class="form-label">Text</label>
+                          <input name="Text" type="text" class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit comment</button>
+                      </form>
+
+                        </li>
+                     </ul>
+                    </div>
                   </div>
                 </div>
                  }

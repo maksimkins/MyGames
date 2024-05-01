@@ -12,10 +12,10 @@ namespace MyGames.Repositories.Dapper
     public class GameDapperRepository : IGameRepository
     {
         private const string connectionString = @"Server=localhost;Database=MyGames;Trusted_Connection=True;TrustServerCertificate=True";
-        public Task<IEnumerable<Game>> GetAllAsync()
+        public async Task<IEnumerable<Game>> GetAllAsync()
         {
             var connection = new SqlConnection(connectionString);
-            var games = connection.QueryAsync<Game>(@"select * from Games");
+            var games = await connection.QueryAsync<Game>(@"select * from Games");
 
             return games;
         }

@@ -32,7 +32,7 @@ namespace MyGames.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateComment(Comment comment) {
+        public IActionResult CreateComment(Comment comment) {
             try
             {   
                 service.CreateCommentAsync(comment);
@@ -44,14 +44,13 @@ namespace MyGames.Controllers
             }
         }
 
-        [Route("[action]/{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete]
+        public IActionResult DeleteComment(Comment comment)
         {
             try
             {
-                Comment comment = new Comment() { Id = id };
                 service.DeleteCommentAsync(comment);
-                return Redirect("/Game");
+                return Redirect($"/Game/{comment.GameId}");
 
             }
             catch(Exception ex)
@@ -60,8 +59,8 @@ namespace MyGames.Controllers
             }
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Put(Comment comment)
+        [HttpPut]
+        public IActionResult Put(Comment comment)
         {
             try
             {

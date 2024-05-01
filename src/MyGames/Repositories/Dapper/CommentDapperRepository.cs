@@ -7,9 +7,6 @@ using Dapper;
 using MyGames.Models;
 using MyGames.Repositories.Base;
 
-#pragma warning disable CS1998
-#pragma warning disable CS4014
-
 namespace MyGames.Repositories.Dapper
 {
     public class CommentDapperRepository : ICommentRepository
@@ -19,7 +16,7 @@ namespace MyGames.Repositories.Dapper
         {
             comment.Id = id;
             var connection = new SqlConnection(connectionString);
-            connection.ExecuteAsync(@"update Comments 
+            await connection.ExecuteAsync(@"update Comments 
                                         set 
                                         Title = @Title,
                                         Text = @Text
@@ -29,7 +26,7 @@ namespace MyGames.Repositories.Dapper
         public async Task CreateAsync(Comment comment)
         {
             var connection = new SqlConnection(connectionString);
-            connection.ExecuteAsync(@"insert into Comments
+            await connection.ExecuteAsync(@"insert into Comments
                                         (Text, Title, GameId)
                                         values (@Text, @Title, @GameId)", comment);
         }
@@ -37,7 +34,7 @@ namespace MyGames.Repositories.Dapper
         public async Task DeleteAsync(Comment comment)
         {
             var connection = new SqlConnection(connectionString);
-            connection.ExecuteAsync(@"delete from Comments
+            await connection.ExecuteAsync(@"delete from Comments
                                         where Id = @Id", comment);
         }
 

@@ -14,14 +14,14 @@ namespace MyGames.Services
         public GameService(IGameRepository repository) {
             this.repository = repository;
         }
-        public Task<IEnumerable<Game>> AllGamesAsync()
+        public async Task<IEnumerable<Game>> AllGamesAsync()
         {   
-            return repository.GetAllAsync();
+            return await repository.GetAllAsync();
         }
 
-        public Task<Game?> GameByIdAsync(int id)
+        public async Task<Game?> GameByIdAsync(int id)
         {
-            return repository.GetByIdAsync(id);
+            return await repository.GetByIdAsync(id);
         }
     }
 }

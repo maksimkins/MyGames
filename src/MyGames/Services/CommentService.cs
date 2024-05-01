@@ -6,8 +6,6 @@ using MyGames.Models;
 using MyGames.Repositories.Base;
 using MyGames.Services.Base;
 
-#pragma warning disable 1998
-#pragma warning disable 4014
 
 namespace MyGames.Services
 {
@@ -23,7 +21,8 @@ namespace MyGames.Services
             {
                 throw new ArgumentNullException(nameof(comment));
             }
-            repository.ChangeAsync(id, comment);
+            
+            await repository.ChangeAsync(id, comment);
         }
 
         public async Task CreateCommentAsync(Comment comment)
@@ -33,7 +32,7 @@ namespace MyGames.Services
                 throw new ArgumentNullException(nameof(comment));
             }
 
-            repository.CreateAsync(comment);
+            await repository.CreateAsync(comment);
         }
 
         public async Task DeleteCommentAsync(Comment comment)
@@ -43,7 +42,7 @@ namespace MyGames.Services
                 throw new ArgumentNullException(nameof(comment));
             }
 
-            repository.DeleteAsync(comment);
+            await repository.DeleteAsync(comment);
         }
 
         public Task<IEnumerable<Comment>> GetCommentsByGameAsync(int gameId)

@@ -45,13 +45,12 @@ namespace MyGames.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteComment(Comment comment)
+        public IActionResult DeleteComment([FromBody]Comment comment)
         {
             try
             {
                 service.DeleteCommentAsync(comment);
                 return Redirect($"/Game/{comment.GameId}");
-
             }
             catch(Exception ex)
             {

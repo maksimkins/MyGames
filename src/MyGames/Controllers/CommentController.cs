@@ -36,7 +36,7 @@ namespace MyGames.Controllers
             try
             {   
                 service.CreateCommentAsync(comment);
-                return Redirect($"/Game/{comment.GameId}");
+                return Redirect($"Comment/{comment.GameId}");
             }
             catch(Exception ex)
             {
@@ -50,7 +50,7 @@ namespace MyGames.Controllers
             try
             {
                 service.DeleteCommentAsync(comment);
-                return Redirect($"/Game/{comment.GameId}");
+                return Ok();
             }
             catch(Exception ex)
             {
@@ -65,7 +65,7 @@ namespace MyGames.Controllers
             {
                 int gameId = comment.Id is null ? 0 : (int)comment.Id;
                 service.ChangeCommentAsync(gameId, comment);
-                return Redirect($"/Game/{comment.GameId}");
+                return Ok();
 
             }
             catch(Exception ex)

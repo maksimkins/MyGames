@@ -5,25 +5,46 @@
 }
 
 <script>
-  function DeleteComment(comment) {
+  function DeleteComment(commentJson) {
+
+    let comment = JSON.parse(commentJson);
+
     fetch("/Comment", {
       method: 'DELETE',
-      body: comment,
+      body: commentJson,
       headers: {
         'Content-type': 'application/json; charset=UTF-8'
       }
-    })
+    }).then((response) => {
+            if (!response.ok)
+                throw new Error(response.statusText);
+
+            let card = document.getElementById(`comment ${comment.Id}`);
+            if (card.parentNode) {
+              card.parentNode.removeChild(card);
+            }
+
+        }).catch((err) => {
+          console.log(err.message);
+        });
+    
+
   }
 
 
-  function PutComment(comment) {
-    fetch("/Comment", {
+  function PutComment(commentJson) {
+      fetch("/Comment", {
       method: 'PUT',
-      body: comment,
+      body: commentJson,
       headers: {
         'Content-type': 'application/json; charset=UTF-8'
       }
-    })
+    }).then((response) => {
+            if (!response.ok)
+                throw new Error(response.statusText);
+        }).catch((err) => {
+          console.log(err.message);
+        });
   }
 @* 
   let button = document.getElementById("change-button");
@@ -58,7 +79,7 @@
         else {
             <div class="comments d-flex flex-wrap justify-content-between mb-3">
                 @foreach(var comment in Model) {
-                <div class="card " style="width: 18rem;">
+                <div class="card" id="comment @comment.Id" style="width: 18rem;">
                   <div class="card-body">
                     <h5 class="card-title">@comment.Title</h5>
                     <li class="list-group-item mb-2">@comment.Text</li>

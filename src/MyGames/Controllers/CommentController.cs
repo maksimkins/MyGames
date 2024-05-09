@@ -17,7 +17,7 @@ namespace MyGames.Controllers
             this.service = service;
         }
 
-        [HttpGet("{gameid : int}")]
+        [HttpGet("{gameid}")]
         public async Task<IActionResult> GetComments(int gameId) {
             try
             {

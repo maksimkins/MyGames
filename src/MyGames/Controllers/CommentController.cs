@@ -17,7 +17,7 @@ namespace MyGames.Controllers
             this.service = service;
         }
 
-        [HttpGet("{gameid?}")]
+        [HttpGet("{gameid : int}")]
         public async Task<IActionResult> GetComments(int gameId) {
             try
             {
@@ -59,10 +59,11 @@ namespace MyGames.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put(Comment comment)
+        public IActionResult Put([FromBody]Comment comment)
         {
             try
             {
+                System.Console.WriteLine(comment.Text);
                 int gameId = comment.Id is null ? 0 : (int)comment.Id;
                 service.ChangeCommentAsync(gameId, comment);
                 return Ok();

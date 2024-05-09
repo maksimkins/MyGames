@@ -32,7 +32,18 @@
   }
 
 
-  function PutComment(commentJson) {
+  function PutComment(formId) {
+
+    let form = document.getElementById(formId);
+    
+    let data = new FormData(form);
+    let comment = {};
+    for (var [key, value] of data) {
+      comment[`${key}`] = value;
+    }
+
+    let commentJson = JSON.stringify(comment);
+
       fetch("/Comment", {
       method: 'PUT',
       body: commentJson,
@@ -42,6 +53,13 @@
     }).then((response) => {
             if (!response.ok)
                 throw new Error(response.statusText);
+            let card = document.getElementById(`comment ${comment.Id}`);
+            let title = card.querySelector('.card-title');
+            let text = card.querySelector('.card-text');
+
+            title.innerHTML = `${comment.Title}`;
+            text.innerHTML = `${comment.Text}`;
+
         }).catch((err) => {
           console.log(err.message);
         });
@@ -82,7 +100,7 @@
                 <div class="card" id="comment @comment.Id" style="width: 18rem;">
                   <div class="card-body">
                     <h5 class="card-title">@comment.Title</h5>
-                    <li class="list-group-item mb-2">@comment.Text</li>
+                    <li class="card-text list-group-item mb-2">@comment.Text</li>
                     @* <a href="/Comment/Delete/@(comment.Id)" class="btn btn-primary">delete comment</a> *@
 
                     <button type="button" onclick="DeleteComment(`@JsonSerializer.Serialize(comment)`)" class="btn btn-danger">Delete comment</button>
@@ -93,7 +111,7 @@
                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                        <li>
 
-                        <form action="">
+                        <form onsubmit="return false;" id="form-@comment.Id">
                           <legend>Change the comment</legend>
                             <div class="mb-3">
                               <label for="disabledTextInput" class="form-label">GameId</label>
@@ -115,7 +133,7 @@
                           <input id="text" name="Text" type="text" class="form-control">
                         </div>
 
-                        <button id="change-button" type="submit" class="btn btn-primary">Submit comment</button>
+                        <button onclick="PutComment(`form-@comment.Id`)" type="submit" class="btn btn-primary">Change comment</button>
                       </form>
 
                         </li>

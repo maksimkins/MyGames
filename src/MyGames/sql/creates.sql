@@ -32,12 +32,10 @@
 	--Id int primary key identity(1, 1),
 	--Url nvarchar(100) not null,
 	--RequestBody nvarchar(150),
-	--ResponsetBody nvarchar(150),
+	--ResponsetBody nvarchar(max),
 	--CreationDate datetime2 not null,
 	--EndDate datetime2 not null,
 	--StatusCode int not null,
 	--HttpMethod nvarchar(20)
  --)
-
-
 

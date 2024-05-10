@@ -17,6 +17,8 @@ namespace MyGames.Middlewares
             this.service = service;
         }
 
+        public bool isLogging { get; set; }
+
         private async Task<string> ReadRequestBody(HttpContext context) 
         {
             
@@ -73,6 +75,12 @@ namespace MyGames.Middlewares
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            if(!isLogging)
+            {
+                await next.Invoke(context);
+                return;
+            }
+
             var log = new Log();
             try
             {

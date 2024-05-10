@@ -39,3 +39,8 @@
 	--HttpMethod nvarchar(20)
  --)
 
+ use MyGames;
+
+ select * 
+ from Logs;
+

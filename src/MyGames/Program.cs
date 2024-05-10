@@ -1,4 +1,5 @@
 using MyGames.Models;
+using MyGames.Options;
 using MyGames.Repositories.Base;
 using MyGames.Repositories.Dapper;
 using MyGames.Services;
@@ -15,9 +16,10 @@ builder.Services.AddScoped<ICommentRepository, CommentDapperRepository>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 
-var app = builder.Build();
+var connectionStringSection = builder.Configuration.GetSection("connections:MsSql");
+builder.Services.Configure<MsSqlconnectionOptions>(connectionStringSection);
 
-// Configure the HTTP request pipeline.
+var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

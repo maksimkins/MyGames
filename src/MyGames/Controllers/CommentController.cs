@@ -63,7 +63,6 @@ namespace MyGames.Controllers
         {
             try
             {
-                System.Console.WriteLine(comment.Text);
                 int gameId = comment.Id is null ? 0 : (int)comment.Id;
                 service.ChangeCommentAsync(gameId, comment);
                 return Ok();

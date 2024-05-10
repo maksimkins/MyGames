@@ -1,3 +1,4 @@
+using MyGames.Middlewares;
 using MyGames.Models;
 using MyGames.Options;
 using MyGames.Repositories.Base;
@@ -11,10 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IGameRepository, GameDapperRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentDapperRepository>();
-
 builder.Services.AddScoped<IGameService, GameService>();
+
+builder.Services.AddScoped<ICommentRepository, CommentDapperRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+
+builder.Services.AddScoped<ILogRepository, LogDapperRepository>();
+builder.Services.AddScoped<ILogService, LogService>();
+
+builder.Services.AddScoped<LogMiddleware>();
 
 var connectionStringSection = builder.Configuration.GetSection("connections:MsSql");
 builder.Services.Configure<MsSqlconnectionOptions>(connectionStringSection);
@@ -27,6 +33,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseMiddleware<LogMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

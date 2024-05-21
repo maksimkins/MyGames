@@ -17,7 +17,7 @@ namespace MyGames.Options
                 string password = Password is null ? "" : $"Password={Password};";
 
                 string connectionString = $"Server={Server};Database={Database};{trusted_Connection}{trustServerCertificate}{user_id}{password}";
-                System.Console.WriteLine(connectionString);
+
                 return connectionString;
             } 
 

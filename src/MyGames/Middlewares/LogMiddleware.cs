@@ -12,9 +12,10 @@ namespace MyGames.Middlewares
     public class LogMiddleware : IMiddleware
     {
         private readonly ILogService service;
-        public LogMiddleware(ILogService service) 
+        public LogMiddleware(ILogService service, IConfiguration configuration) 
         {
             this.service = service;
+            isLogging = configuration.GetSection("GeneralOptions:isLogging")?.Get<bool>() is null ? false: true;
         }
 
         public bool isLogging { get; set; }

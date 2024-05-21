@@ -20,16 +20,7 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ILogRepository, LogDapperRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
 
-builder.Services.AddScoped<LogMiddleware>((serviceProvider) => {
-
-    var service = serviceProvider.GetRequiredService<ILogService>();
-    var logMiddleware = new LogMiddleware(service);
-
-    var isLogging = builder.Configuration.GetSection("GeneralOptions:isLogging").Get<bool>();
-    logMiddleware.isLogging = isLogging;
-
-    return logMiddleware;
-});
+builder.Services.AddScoped<LogMiddleware>();
 
 var connectionStringSection = builder.Configuration.GetSection("connections:MsSqlStep");
 builder.Services.Configure<MsSqlconnectionOptions>(connectionStringSection);

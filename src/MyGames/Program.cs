@@ -31,7 +31,7 @@ builder.Services.AddScoped<LogMiddleware>((serviceProvider) => {
     return logMiddleware;
 });
 
-var connectionStringSection = builder.Configuration.GetSection("connections:MsSql");
+var connectionStringSection = builder.Configuration.GetSection("connections:MsSqlStep");
 builder.Services.Configure<MsSqlconnectionOptions>(connectionStringSection);
 
 var app = builder.Build();

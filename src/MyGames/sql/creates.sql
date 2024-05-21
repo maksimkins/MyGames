@@ -1,5 +1,7 @@
  create database MyGames;
 
+  use MyGames;
+
  create table Games(
      Id INT PRIMARY KEY IDENTITY(1, 1),
      Name NVARCHAR(60),
@@ -26,7 +28,7 @@
  (2, 'nice', 'nice game!!'),
  (2, 'bad', 'bad game!!')
 
- use MyGames;
+
 
  create table Logs(
 	Id int primary key identity(1, 1),

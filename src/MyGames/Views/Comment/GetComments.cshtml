@@ -27,8 +27,6 @@
         }).catch((err) => {
           console.log(err.message);
         });
-    
-
   }
 
 
@@ -64,32 +62,12 @@
           console.log(err.message);
         });
   }
-@* 
-  let button = document.getElementById("change-button");
-  console.log(button);
-  button.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    let gameId = document.getElementById("game-id").nodeValue;
-    let commentId = document.getElementById("comment-id").nodeValue;
-    let title = document.getElementById("title").nodeValue;
-    let text = document.getElementById("text").nodeValue;
-
-    let comment = {
-      Id: commentId,
-      GameId: gameId,
-      Title: title,
-      Text: text
-    };
-
-    PutComment(comment);
-  }) *@
 
 </script>
 
 <div class="comments-container">
    <div class="comments d-flex flex-wrap justify-content-between">
-        @if(Model is null ){
+        @if(Model is null || !Model.Any()){
             <div class="alert alert-danger" role="alert">
                 Sorry! There is no comments for this game(
             </div>
@@ -101,7 +79,6 @@
                   <div class="card-body">
                     <h5 class="card-title">@comment.Title</h5>
                     <li class="card-text list-group-item mb-2">@comment.Text</li>
-                    @* <a href="/Comment/Delete/@(comment.Id)" class="btn btn-primary">delete comment</a> *@
 
                     <button type="button" onclick="DeleteComment(`@JsonSerializer.Serialize(comment)`)" class="btn btn-danger">Delete comment</button>
                     <div class="dropdown">
@@ -114,13 +91,13 @@
                         <form onsubmit="return false;" id="form-@comment.Id">
                           <legend>Change the comment</legend>
                             <div class="mb-3">
-                              <label for="disabledTextInput" class="form-label">GameId</label>
-                              <input id="game-id" name="GameId" type="text" value="@(gameId is null ? "error" : (int)gameId)">
+                              <label hidden for="disabledTextInput" class="form-label">GameId</label>
+                              <input hidden id="game-id" name="GameId" type="text" value="@(gameId is null ? "error" : (int)gameId)">
                             </div>
 
                             <div class="mb-3">
-                              <label for="disabledTextInput" class="form-label">comment.Id</label>
-                              <input id="comment-id" name="Id" type="text" value="@(comment.Id is null ? "error" : (int)comment.Id)">
+                              <label hidden for="disabledTextInput" class="form-label">comment.Id</label>
+                              <input hidden id="comment-id" name="Id" type="text" value="@(comment.Id is null ? "error" : (int)comment.Id)">
                             </div>
 
                         <div class="mb-3">
@@ -142,17 +119,15 @@
                   </div>
                 </div>
                  }
-            </div>
-                
-            
-            
-           
+            </div>  
 
-            <form action="/Comment" method="post">
+        }
+
+        <form action="/Comment" method="post">
                 <legend>Write a new comment!!</legend>
                   <div class="mb-3">
-                    <label for="disabledTextInput" class="form-label">GameId</label>
-                    <input name="GameId" type="text" value="@(gameId is null ? "error" : (int)gameId)">
+                    <label hidden for="disabledTextInput" class="form-label">GameId</label>
+                    <input hidden name="GameId" type="text" value="@(gameId is null ? "error" : (int)gameId)">
                   </div>
 
               <div class="mb-3">
@@ -167,7 +142,5 @@
 
               <button type="submit" class="btn btn-primary">Submit comment</button>
             </form>
-
-        }
    </div>
 </div>

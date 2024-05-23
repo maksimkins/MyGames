@@ -9,7 +9,7 @@
 
     let comment = JSON.parse(commentJson);
 
-    fetch("/Comment", {
+    fetch(`/Comment`, {
       method: 'DELETE',
       body: commentJson,
       headers: {
@@ -23,6 +23,7 @@
             if (card.parentNode) {
               card.parentNode.removeChild(card);
             }
+            location.reload()
 
         }).catch((err) => {
           console.log(err.message);
@@ -42,7 +43,7 @@
 
     let commentJson = JSON.stringify(comment);
 
-      fetch("/Comment", {
+      fetch(`/Comment/${comment.Id}`, {
       method: 'PUT',
       body: commentJson,
       headers: {
@@ -57,6 +58,85 @@
 
             title.innerHTML = `${comment.Title}`;
             text.innerHTML = `${comment.Text}`;
+            location.reload()
+
+        }).catch((err) => {
+          console.log(err.message);
+        });
+  }
+
+  function PostComment(formId) {
+
+    let form = document.getElementById(formId);
+    
+    let data = new FormData(form);
+    let comment = {};
+    for (var [key, value] of data) {
+      comment[`${key}`] = value;
+    }
+
+    let commentJson = JSON.stringify(comment);
+
+      fetch("/Comment", {
+      method: 'POST',
+      body: commentJson,
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    }).then((response) => {
+            if (!response.ok)
+                throw new Error(response.statusText);
+
+            let commentWrapper = document.querySelector(".comments");
+            console.log(commentWrapper);
+
+
+            let card = `<div class="card" id="comment ${comment.Id}" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">${comment.Title}</h5>
+                    <li class="card-text list-group-item mb-2">${comment.Text}</li>
+
+                    <button type="button" onclick="DeleteComment(${JSON.stringify(comment)})" class="btn btn-danger">Delete comment</button>
+                    <div class="dropdown">
+                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                       Change Comment
+                     </button>
+                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                       <li>
+
+                        <form onsubmit="return false;" id="form-${comment.Id}">
+                          <legend>Change the comment</legend>
+                            <div class="mb-3">
+                              <label hidden for="disabledTextInput" class="form-label">GameId</label>
+                              <input hidden id="game-id" name="GameId" type="number" value="@(gameId is null ? "error" : (int)gameId)">
+                            </div>
+
+                            <div class="mb-3">
+                              <label hidden for="disabledTextInput" class="form-label">comment.Id</label>
+                              <input hidden id="comment-id" name="Id" type="number" value="${comment.Id === null ? "error" : comment.Id}">
+                            </div>
+
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label">Title</label>
+                          <input id="title" name="Title" type="text" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="exampleInputPassword1" class="form-label">Text</label>
+                          <input id="text" name="Text" type="text" class="form-control">
+                        </div>
+
+                        <button onclick="PutComment(form-${comment.Id})" type="submit" class="btn btn-primary">Change comment</button>
+                      </form>
+
+                        </li>
+                     </ul>
+                    </div>
+                  </div>
+                </div>`;
+
+            commentWrapper.insertAdjacentHTML("afterbegin", card);
+            location.reload()
 
         }).catch((err) => {
           console.log(err.message);
@@ -73,7 +153,7 @@
             </div>
         }
         else {
-            <div class="comments d-flex flex-wrap justify-content-between mb-3">
+            <div id="comments-wrapper" class="comments d-flex flex-wrap justify-content-between mb-3">
                 @foreach(var comment in Model) {
                 <div class="card" id="comment @comment.Id" style="width: 18rem;">
                   <div class="card-body">
@@ -92,12 +172,12 @@
                           <legend>Change the comment</legend>
                             <div class="mb-3">
                               <label hidden for="disabledTextInput" class="form-label">GameId</label>
-                              <input hidden id="game-id" name="GameId" type="text" value="@(gameId is null ? "error" : (int)gameId)">
+                              <input hidden id="game-id" name="GameId" type="number" value="@(gameId is null ? "error" : (int)gameId)">
                             </div>
 
                             <div class="mb-3">
                               <label hidden for="disabledTextInput" class="form-label">comment.Id</label>
-                              <input hidden id="comment-id" name="Id" type="text" value="@(comment.Id is null ? "error" : (int)comment.Id)">
+                              <input hidden id="comment-id" name="Id" type="number" value="@(comment.Id is null ? "error" : (int)comment.Id)">
                             </div>
 
                         <div class="mb-3">
@@ -123,7 +203,7 @@
 
         }
 
-        <form action="/Comment" method="post">
+        <form id="comment-post-form" onsubmit="return false;">
                 <legend>Write a new comment!!</legend>
                   <div class="mb-3">
                     <label hidden for="disabledTextInput" class="form-label">GameId</label>
@@ -140,7 +220,7 @@
                 <input name="Text" type="text" class="form-control">
               </div>
 
-              <button type="submit" class="btn btn-primary">Submit comment</button>
+              <button onclick="PostComment(`comment-post-form`)" type="submit" class="btn btn-primary">Submit comment</button>
             </form>
    </div>
 </div>

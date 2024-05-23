@@ -20,6 +20,7 @@ public class CommentValidator : AbstractValidator<Comment>
             .NotNull();
 
         RuleFor<int?>((c) => c.GameId)
-            .NotNull();
+            .NotNull()
+            .Must(id => id > 0);
     }
 }

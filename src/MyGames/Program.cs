@@ -1,3 +1,5 @@
+using System.Reflection;
+using FluentValidation;
 using MyGames.Middlewares;
 using MyGames.Models;
 using MyGames.Options;
@@ -22,7 +24,9 @@ builder.Services.AddScoped<ILogService, LogService>();
 
 builder.Services.AddScoped<LogMiddleware>();
 
-var connectionStringSection = builder.Configuration.GetSection("connections:MsSqlStep");
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+var connectionStringSection = builder.Configuration.GetSection("connections:MsSql");
 builder.Services.Configure<MsSqlconnectionOptions>(connectionStringSection);
 
 var app = builder.Build();

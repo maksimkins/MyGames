@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using MyGames.Models;
 using MyGames.Services.Base;
@@ -13,12 +14,16 @@ namespace MyGames.Controllers
     public class CommentController : Controller
     {
         private readonly ICommentService service;
-        public CommentController(ICommentService service) {
+        private readonly IValidator<Comment> validator;
+        public CommentController(ICommentService service, IValidator<Comment> validator) 
+        {
             this.service = service;
+            this.validator = validator;
         }
 
         [HttpGet("{gameid}")]
-        public async Task<IActionResult> GetComments(int gameId) {
+        public async Task<IActionResult> GetComments(int gameId) 
+        {
             try
             {
                 ViewBag.gameId = gameId;
@@ -32,11 +37,22 @@ namespace MyGames.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateComment(Comment comment) {
+        public async Task<IActionResult> CreateComment([FromBody]Comment comment) 
+        {
             try
             {   
-                service.CreateCommentAsync(comment);
-                return Redirect($"Comment/{comment.GameId}");
+                var result = await validator.ValidateAsync(comment);
+
+                if(!result.IsValid)
+                {
+                    foreach(var error in result.Errors)
+                    {
+                        base.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                    }
+                    return BadRequest();
+                }
+                await service.CreateCommentAsync(comment);
+                return Ok();
             }
             catch(Exception ex)
             {
@@ -45,28 +61,38 @@ namespace MyGames.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteComment([FromBody]Comment comment)
-        {
+        public async Task<IActionResult> DeleteComment([FromBody]Comment comment)
+        {// validate comment or not? and if id change in view script
             try
             {
-                service.DeleteCommentAsync(comment);
+                await service.DeleteCommentAsync(comment);
                 return Ok();
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut]
-        public IActionResult Put([FromBody]Comment comment)
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Put([FromBody]Comment comment, int Id)
         {
             try
             {
-                int gameId = comment.Id is null ? 0 : (int)comment.Id;
-                service.ChangeCommentAsync(gameId, comment);
-                return Ok();
+                var result = await validator.ValidateAsync(comment);
 
+                if(!result.IsValid)
+                {
+                    foreach(var error in result.Errors)
+                    {
+                        base.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                    }
+                    return BadRequest();
+                }
+                
+                await service.ChangeCommentAsync(Id, comment);
+
+                return Ok();
             }
             catch(Exception ex)
             {

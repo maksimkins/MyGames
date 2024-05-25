@@ -60,11 +60,16 @@ namespace MyGames.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteComment([FromBody]Comment comment)
-        {// validate comment or not? and if id change in view script
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteComment(int Id)
+        {
             try
             {
+                var comment = new Comment()
+                {
+                    Id = Id
+                };
+
                 await service.DeleteCommentAsync(comment);
                 return Ok();
             }

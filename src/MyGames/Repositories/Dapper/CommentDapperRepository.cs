@@ -28,6 +28,8 @@ namespace MyGames.Repositories.Dapper
                                         set 
                                         Title = @Title,
                                         Text = @Text
+                                        ChangeDate = @ChangeDate,
+                                        Rate = @Rate,
                                         where Id = @id", comment);
         }
 
@@ -35,8 +37,8 @@ namespace MyGames.Repositories.Dapper
         {
             var connection = new SqlConnection(connectionStringOptions.ConnectionString);
             await connection.ExecuteAsync(@"insert into Comments
-                                        (Text, Title, GameId)
-                                        values (@Text, @Title, @GameId)", comment);
+                                        (Text, Title, GameId, CreationDate, ChangeDate, Rate)
+                                        values (@Text, @Title, @GameId, @CreationDate, @Rate)", comment);
         }
 
         public async Task DeleteAsync(Comment comment)

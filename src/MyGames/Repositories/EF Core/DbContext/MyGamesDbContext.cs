@@ -15,7 +15,7 @@ using MyGames.Options.Base;
 public class MyGamesDbContext : DbContext
 {
     private readonly IConnectionStringOption connectionStringOptions;
-    public DbSet<Comment> Users { get; set; }
+    public DbSet<Comment> Comments { get; set; }
     public DbSet<Game> Games { get; set; }
     public DbSet<Game> Logs { get; set; }
 

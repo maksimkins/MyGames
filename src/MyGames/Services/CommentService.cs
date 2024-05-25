@@ -27,7 +27,7 @@ namespace MyGames.Services
 
         public async Task CreateCommentAsync(Comment comment)
         {
-            if (comment == null || comment.GameId == null || comment.Title == null || comment.Text == null)
+            if (comment == null || comment.GameId == null || comment.Title == null || comment.Text == null || comment.CreationDate == null || comment.Rate == null)
             {
                 throw new ArgumentNullException(nameof(comment));
             }

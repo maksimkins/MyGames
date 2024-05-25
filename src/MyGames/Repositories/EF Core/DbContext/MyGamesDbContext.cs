@@ -17,6 +17,7 @@ public class MyGamesDbContext : DbContext
     private readonly IConnectionStringOption connectionStringOptions;
     public DbSet<Comment> Users { get; set; }
     public DbSet<Game> Games { get; set; }
+    public DbSet<Game> Logs { get; set; }
 
     public MyGamesDbContext(IOptionsSnapshot<MsSqlconnectionOptions> option)
     {
@@ -31,9 +32,40 @@ public class MyGamesDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // modelBuilder.Entity<Game>()
-        // .HasIndex(g => g.Name)
-        // .IsUnique();
+        modelBuilder.Entity<Game>()
+        .HasKey(g => g.Id);
+        
+        modelBuilder.Entity<Game>()
+        .Property(g => g.Name)
+        .IsRequired();
+
+        modelBuilder.Entity<Game>()
+        .Property(g => g.Price)
+        .IsRequired();
+
+        modelBuilder.Entity<Game>()
+        .Property(g => g.Rate)
+        .HasDefaultValue(0)
+        .IsRequired();
+
+        modelBuilder.Entity<Comment>()
+        .HasKey(c => c.Id);
+        
+        modelBuilder.Entity<Comment>()
+        .Property(c => c.Text)
+        .IsRequired();
+
+        modelBuilder.Entity<Comment>()
+        .Property(c => c.Title)
+        .IsRequired();
+
+        modelBuilder.Entity<Comment>()
+        .Property(c => c.Rate)
+        .IsRequired();
+
+        modelBuilder.Entity<Comment>()
+        .Property(c => c.GameId)
+        .IsRequired();
 
         base.OnModelCreating(modelBuilder);
     }

@@ -5,6 +5,8 @@ using MyGames.Models;
 using MyGames.Options;
 using MyGames.Repositories.Base;
 using MyGames.Repositories.Dapper;
+using MyGames.Repositories.EF_Core;
+using MyGames.Repositories.EF_Core.DbContext;
 using MyGames.Services;
 using MyGames.Services.Base;
 
@@ -13,10 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IGameRepository, GameDapperRepository>();
+builder.Services.AddDbContext<MyGamesDbContext>();
+
+builder.Services.AddScoped<IGameRepository, GameEFCoreRepository>();
 builder.Services.AddScoped<IGameService, GameService>();
 
-builder.Services.AddScoped<ICommentRepository, CommentDapperRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentEFCoreRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 
 builder.Services.AddScoped<ILogRepository, LogDapperRepository>();

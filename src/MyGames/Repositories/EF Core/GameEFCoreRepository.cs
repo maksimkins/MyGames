@@ -20,6 +20,7 @@ public class GameEFCoreRepository : IGameRepository
     }
     public async Task<IEnumerable<Game>> GetAllAsync()
     {
+        System.Console.WriteLine(dbContext.Games);
         return dbContext.Games;
     }
 

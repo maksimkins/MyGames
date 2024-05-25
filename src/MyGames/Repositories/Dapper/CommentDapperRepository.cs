@@ -27,10 +27,10 @@ namespace MyGames.Repositories.Dapper
             await connection.ExecuteAsync(@"update Comments 
                                         set 
                                         Title = @Title,
-                                        Text = @Text
+                                        Text = @Text,
                                         ChangeDate = @ChangeDate,
-                                        Rate = @Rate,
-                                        where Id = @id", comment);
+                                        Rate = @Rate
+                                        where Id = @Id", comment);
         }
 
         public async Task CreateAsync(Comment comment)
@@ -38,7 +38,7 @@ namespace MyGames.Repositories.Dapper
             var connection = new SqlConnection(connectionStringOptions.ConnectionString);
             await connection.ExecuteAsync(@"insert into Comments
                                         (Text, Title, GameId, CreationDate, ChangeDate, Rate)
-                                        values (@Text, @Title, @GameId, @CreationDate, @Rate)", comment);
+                                        values (@Text, @Title, @GameId, @CreationDate, @ChangeDate, @Rate)", comment);
         }
 
         public async Task DeleteAsync(Comment comment)

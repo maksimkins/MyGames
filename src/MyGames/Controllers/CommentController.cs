@@ -52,6 +52,7 @@ namespace MyGames.Controllers
                     return BadRequest();
                 }
                 await service.CreateCommentAsync(comment);
+
                 return Ok();
             }
             catch(Exception ex)

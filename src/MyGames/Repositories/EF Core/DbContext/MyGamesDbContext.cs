@@ -17,7 +17,7 @@ public class MyGamesDbContext : DbContext
     private readonly IConnectionStringOption connectionStringOptions;
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Game> Games { get; set; }
-    public DbSet<Game> Logs { get; set; }
+    public DbSet<Log> Logs { get; set; }
 
     public MyGamesDbContext(IOptionsSnapshot<MsSqlconnectionOptions> option)
     {

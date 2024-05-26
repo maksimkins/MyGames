@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyGames.Repositories.EF_Core.DbContext;
 
@@ -11,9 +12,11 @@ using MyGames.Repositories.EF_Core.DbContext;
 namespace MyGames.Migrations
 {
     [DbContext(typeof(MyGamesDbContext))]
-    partial class MyGamesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240526091604_Fix")]
+    partial class Fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,7 +123,6 @@ namespace MyGames.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("HttpMethod")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RequestBody")
@@ -133,7 +135,6 @@ namespace MyGames.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

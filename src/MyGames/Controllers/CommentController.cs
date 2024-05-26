@@ -83,8 +83,8 @@ namespace MyGames.Controllers
         [HttpPut("{Id}")]
         public async Task<IActionResult> Put([FromBody]Comment comment, int Id)
         {
-            try
-            {
+            // try
+            // {
                 var result = await validator.ValidateAsync(comment);
 
                 if(!result.IsValid)
@@ -99,11 +99,11 @@ namespace MyGames.Controllers
                 await service.ChangeCommentAsync(Id, comment);
 
                 return Ok();
-            }
-            catch(Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            // }
+            // catch(Exception ex)
+            // {
+            //     return StatusCode(500, ex.Message);
+            // }
         }
     }
 }

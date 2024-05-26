@@ -12,7 +12,6 @@ using MyGames.Services.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<MyGamesDbContext>();
@@ -30,7 +29,7 @@ builder.Services.AddScoped<LogMiddleware>();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-var connectionStringSection = builder.Configuration.GetSection("connections:MsSql");
+var connectionStringSection = builder.Configuration.GetSection("connections:MsSqlStep");
 builder.Services.Configure<MsSqlconnectionOptions>(connectionStringSection);
 
 var app = builder.Build();

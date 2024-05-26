@@ -56,7 +56,6 @@
       comment[`${key}`] = value;
     }
 
-    console.log(comment)
     let commentJson = JSON.stringify(comment);
 
       fetch(`/Comment/${comment.Id}`, {

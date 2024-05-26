@@ -72,19 +72,20 @@ create table Games(
 	CreationDate datetime2 not null,
 	EndDate datetime2 not null,
 	StatusCode int not null,
-	HttpMethod nvarchar(20)
+	HttpMethod nvarchar(20) not null
  );
 
- insert into Games(Name, Description, Price, CreationDate)
+ insert into Games(Name, Description, Price, CreationDate, ForAdultsOnly)
  values
- ('Battlefront 2', 'coop shooter from StarWars universe part 2', 50, '13-5-2014'),
- ('Battlefront 1', 'coop shooter from StarWars universe', 30, '13-5-2013'),
- ('Terraria', 'sandbox from independent developers', 15, '13-5-2015')
+ ('Battlefront 2', 'coop shooter from StarWars universe part 2', 50, '2014-05-20', 0),
+ ('Battlefront 1', 'coop shooter from StarWars universe', 30, '2010-05-19', 0),
+ ('Terraria', 'sandbox from independent developers', 15, '2011-05-20', 0)
 
+ select * from Games;
 
  insert into Comments(GameId, Title, Text, Rate, CreationDate)
  values
- (4, 'awesome', 'awesome game!!', 4.5, '14-6-2022'),
- (5, 'nice', 'nice game!!', 4, '13-5-2022'),
- (5, 'bad', 'bad game!!', 2.5, '14-5-2022'),
- (6, 'bad', 'bad game!!', 1.5, '14-5-2023')
+ (6, 'awesome', 'awesome game!!', 4.5, '2022-05-20'),
+ (7, 'nice', 'nice game!!', 4, '2021-05-20'),
+ (7, 'bad', 'bad game!!', 2.5, '2019-05-20'),
+ (8, 'bad', 'bad game!!', 1.5, '2020-05-20')

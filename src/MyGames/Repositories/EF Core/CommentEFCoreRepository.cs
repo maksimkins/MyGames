@@ -21,8 +21,15 @@ public class CommentEFCoreRepository : ICommentRepository
 
     public async Task ChangeAsync(int id, Comment comment)
     {
-        comment.Id = id;
-        dbContext.Update(comment);
+        var commentToChange = await dbContext.Comments.FirstOrDefaultAsync(c => c.Id == id);
+        
+        if(commentToChange is null)   
+            return;
+       
+        commentToChange.Title = comment.Title;
+        commentToChange.Text = comment.Text;
+
+        dbContext.Update(commentToChange);
 
         await dbContext.SaveChangesAsync();
     }

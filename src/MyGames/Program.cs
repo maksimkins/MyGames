@@ -29,7 +29,7 @@ builder.Services.AddScoped<LogMiddleware>();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-var connectionStringSection = builder.Configuration.GetSection("connections:MsSqlStep");
+var connectionStringSection = builder.Configuration.GetSection("connections:MsSql");
 builder.Services.Configure<MsSqlconnectionOptions>(connectionStringSection);
 
 var app = builder.Build();

@@ -16,7 +16,7 @@
                   <div class="card-body">
                     <h5 class="card-title">@game.Name</h5>
                     <li class="list-group-item mb-2">@game.Price $</li>
-                    <a href="/Game/@(game.Id)" class="btn btn-primary">See Details</a>
+                    <a asp-action="GameInfo" asp-route-gameId="@(game.Id)" asp-controller="Game" class="btn btn-primary">See Details</a>
                   </div>
                 </div>
             }

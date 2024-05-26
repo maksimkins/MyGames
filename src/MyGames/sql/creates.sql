@@ -75,17 +75,16 @@ create table Games(
 	HttpMethod nvarchar(20) not null
  );
 
+ use MyGamesDb;
  insert into Games(Name, Description, Price, CreationDate, ForAdultsOnly)
  values
  ('Battlefront 2', 'coop shooter from StarWars universe part 2', 50, '2014-05-20', 0),
  ('Battlefront 1', 'coop shooter from StarWars universe', 30, '2010-05-19', 0),
  ('Terraria', 'sandbox from independent developers', 15, '2011-05-20', 0)
 
- select * from Games;
-
  insert into Comments(GameId, Title, Text, Rate, CreationDate)
  values
- (6, 'awesome', 'awesome game!!', 4.5, '2022-05-20'),
- (7, 'nice', 'nice game!!', 4, '2021-05-20'),
- (7, 'bad', 'bad game!!', 2.5, '2019-05-20'),
- (8, 'bad', 'bad game!!', 1.5, '2020-05-20')
+ (1, 'awesome', 'awesome game!!', 4.5, '2022-05-20'),
+ (2, 'nice', 'nice game!!', 4, '2021-05-20'),
+ (3, 'bad', 'bad game!!', 2.5, '2019-05-20'),
+ (2, 'bad', 'bad game!!', 1.5, '2020-05-20')

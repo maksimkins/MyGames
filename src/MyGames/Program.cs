@@ -22,6 +22,9 @@ builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ICommentRepository, CommentEFCoreRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 
+builder.Services.AddScoped<IUserRepository, UserEFCoreRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddScoped<ILogRepository, LogDapperRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
 

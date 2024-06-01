@@ -46,14 +46,14 @@ namespace MyGames.Services
             await repository.DeleteAsync(comment);
         }
 
-        public Task<IEnumerable<Comment>> GetCommentsByGameAsync(int gameId)
+        public async Task<IEnumerable<Comment>> GetCommentsByGameAsync(int gameId)
         {
             if (gameId <= 0)
             {
                 throw new ArgumentNullException(nameof(gameId));
             }
 
-            return repository.GetAllByGameAsync(gameId);
+            return await repository.GetAllByGameAsync(gameId);
         }
     }
 }

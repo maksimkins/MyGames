@@ -47,7 +47,7 @@ namespace MyGames.Controllers
                 {
                     foreach(var error in result.Errors)
                     {
-                        base.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                        base.ModelState.AddModelError("All", error.ErrorMessage);
                     }
                     return BadRequest();
                 }

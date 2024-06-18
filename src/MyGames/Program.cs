@@ -1,17 +1,31 @@
+using MyGames.Middlewares;
+using MyGames.Models;
+using MyGames.Options;
+using MyGames.Repositories.Base;
+using MyGames.Repositories.Dapper;
+using MyGames.Services;
+using MyGames.Services.Base;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
+builder.Services.AddScoped<IGameRepository, GameDapperRepository>();
+builder.Services.AddScoped<IGameService, GameService>();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+builder.Services.AddScoped<ICommentRepository, CommentDapperRepository>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+
+builder.Services.AddScoped<ILogRepository, LogDapperRepository>();
+builder.Services.AddScoped<ILogService, LogService>();
+
+builder.Services.AddScoped<LogMiddleware>();
+
+var connectionStringSection = builder.Configuration.GetSection("connections:MsSqlStep");
+builder.Services.Configure<MsSqlconnectionOptions>(connectionStringSection);
+
+var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -19,6 +33,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseMiddleware<LogMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

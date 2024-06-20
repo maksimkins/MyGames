@@ -48,31 +48,45 @@ namespace MyGames.Controllers
         [Route("/api/[controller]/[action]", Name = "LoginEndpoint")]
         public async Task<IActionResult> Login([FromForm] User userToLogin)
         {
-            var foundUser = await service.Login(userToLogin);
-
-            if (foundUser == null)
+            try
             {
-                base.TempData["error"] = "Incorrect login or password!";
+                var foundUser = await service.Login(userToLogin);
+
+                if (foundUser == null)
+                {
+                    base.TempData["error"] = "Incorrect login or password!";
+                    return base.RedirectToRoute("LoginView", new
+                    {
+                        ReturnUrl = "/Home/Index"
+                    });
+                }
+
+                var claims = new Claim[] {
+                    new(ClaimTypes.Email, foundUser.Email!),
+                    new("login", foundUser.Login!),
+                    new("id", foundUser.Id.ToString()!),
+                    new("username", foundUser.Username!),
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+                await base.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
+                return base.RedirectToAction(controllerName: "Home", actionName: "Index");
+            }
+
+            catch (Exception ex)
+            {
+                base.TempData["error"] = ex.Message;
                 return base.RedirectToRoute("LoginView", new
                 {
                     ReturnUrl = "/Home/Index"
                 });
             }
 
-            var claims = new Claim[] {
-                new(ClaimTypes.Email, foundUser.Email!),
-                new("login", foundUser.Login!),
-                new("id", foundUser.Id.ToString()!),
-                new("username", foundUser.Username!),
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-            await base.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-
-            return base.RedirectToAction(controllerName: "Home", actionName: "Index");
+            
         }
 
         [Route("/[controller]/[action]", Name = "RegistrationView")]

@@ -29,5 +29,10 @@ namespace MyGames.Repositories.EF_Core
         {
             return await dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
         }
+
+        public async Task<User?> Login(User userToLog)
+        {
+            return await dbContext.Users.FirstOrDefaultAsync(user => user.Login == userToLog.Login && user.Password == userToLog.Password);
+        }
     }
 }

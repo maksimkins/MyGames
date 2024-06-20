@@ -9,5 +9,6 @@ namespace MyGames.Repositories.Base
 {
     public interface IUserRepository : ICreateAsync<User>, IGetByIdAsync<User?>
     {
+        public Task<User?> Login(User userToLog);
     }
 }

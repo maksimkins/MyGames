@@ -33,5 +33,15 @@ namespace MyGames.Services
 
             return await repository.GetByIdAsync(id);
         }
+
+        public async Task<User?> Login(User userToLogin)
+        {
+            if (string.IsNullOrEmpty(userToLogin.Login) || string.IsNullOrEmpty(userToLogin.Password))
+            {
+                throw new ArgumentNullException(nameof(userToLogin));
+            }
+
+            return await repository.Login(userToLogin);
+        }
     }
 }

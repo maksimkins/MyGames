@@ -11,5 +11,7 @@ namespace MyGames.Services.Base
         public Task CreateAsync(User user);
 
         public Task<User?> GetByIdAsync(int id);
+
+        public Task<User?> Login(User userToLog);
     }
 }

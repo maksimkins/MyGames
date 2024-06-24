@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyGames.Models;
 using MyGames.Services.Base;
 
 namespace MyGames.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class CommentController : Controller
     {
@@ -21,7 +23,8 @@ namespace MyGames.Controllers
             this.validator = validator;
         }
 
-        [HttpGet("{gameid}")]
+        [AllowAnonymous]
+        [HttpGet("/api/[controller]/{gameid}")]
         public async Task<IActionResult> GetComments(int gameId) 
         {
             try
@@ -36,9 +39,10 @@ namespace MyGames.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("/api/[controller]")] 
         public async Task<IActionResult> CreateComment([FromBody]Comment comment) 
         {
+            System.Console.WriteLine(comment.UserId);
             try
             {   
                 var result = await validator.ValidateAsync(comment);
@@ -61,7 +65,7 @@ namespace MyGames.Controllers
             }
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("/api/[controller]/{Id}")]
         public async Task<IActionResult> DeleteComment(int Id)
         {
             try
@@ -80,7 +84,7 @@ namespace MyGames.Controllers
             }
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("/api/[controller]/{Id}")]
         public async Task<IActionResult> Put([FromBody]Comment comment, int Id)
         {
             try

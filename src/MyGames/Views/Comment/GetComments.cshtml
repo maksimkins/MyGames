@@ -9,7 +9,7 @@
 
     let comment = JSON.parse(commentJson);
 
-    fetch(`/Comment/${comment.Id}`, {
+    fetch(`/api/Comment/${comment.Id}`, {
       method: 'DELETE',
       headers: {
         'Content-type': 'application/json; charset=UTF-8'
@@ -58,7 +58,7 @@
 
     let commentJson = JSON.stringify(comment);
 
-      fetch(`/Comment/${comment.Id}`, {
+      fetch(`/api/Comment/${comment.Id}`, {
       method: 'PUT',
       body: commentJson,
       headers: {
@@ -89,9 +89,11 @@
       comment[`${key}`] = value;
     }
 
+    comment[`UserId`] = @base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value;
+
     let commentJson = JSON.stringify(comment);
 
-      fetch("/Comment", {
+      fetch("/api/Comment", {
       method: 'POST',
       body: commentJson,
       headers: {
@@ -122,16 +124,22 @@
                 @foreach(var comment in Model) {
                 <div class="card" id="comment @comment.Id" style="width: 18rem;">
                   <div class="card-body">
+                    <h4 class="card-title">commented by @comment.UserId</h4>
                     <h5 class="card-title">@comment.Title</h5>
                     <li class="card-text list-group-item mb-2">@comment.Text</li>
 
-                    <button type="button" onclick="DeleteComment(`@JsonSerializer.Serialize(comment)`)" class="btn btn-danger">Delete comment</button>
-                    <div class="dropdown">
-                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    
+                     @if(base.User.Identity?.IsAuthenticated ?? false)
+                     {
+
+                      <button type="button" onclick="DeleteComment(`@JsonSerializer.Serialize(comment)`)" class="btn btn-danger">Delete comment</button>
+                    
+                      <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                        Change Comment
-                     </button>
-                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                       <li>
+                      </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li>
 
                         <form onsubmit="return false;" id="form-@comment.Id">
                           <legend>Change the comment</legend>
@@ -160,7 +168,10 @@
 
                         </li>
                      </ul>
-                    </div>
+                     </div>
+                     }
+                     
+                    
                   </div>
                 </div>
                  }
@@ -169,8 +180,10 @@
         }
 
         
-   </div>
-   <form id="comment-post-form" onsubmit="return false;">
+   @if(base.User.Identity?.IsAuthenticated ?? false)
+   {
+      <div>
+            <form id="comment-post-form" onsubmit="return false;">
                 <legend>Write a new comment!!</legend>
                   <div class="mb-3">
                     <label hidden for="disabledTextInput" class="form-label">GameId</label>
@@ -189,4 +202,9 @@
 
               <button onclick="PostComment(`comment-post-form`)" type="submit" class="btn btn-primary">Submit comment</button>
             </form>
-</div>
+        </div>
+   }
+   else {
+      <div>Sorry, yo can't write a comments untill youre not loggined <a asp-route="LoginView">click here to login</a></div>
+   }
+        

@@ -89,4 +89,5 @@
  --(3, 'bad', 'bad game!!', 2.5, '2019-05-20'),
  --(2, 'bad', 'bad game!!', 1.5, '2020-05-20')
 
- select * from Users;
+use MyGamesDb;
+delete from Comments;

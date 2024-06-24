@@ -131,10 +131,7 @@ namespace MyGames.Controllers
         {
             await base.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return base.RedirectToRoute("LoginView", new
-            {
-                ReturnUrl
-            });
+            return base.RedirectToAction(actionName: "Index", controllerName: "Home");
         }
     }
 }

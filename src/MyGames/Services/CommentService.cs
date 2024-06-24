@@ -15,13 +15,18 @@ namespace MyGames.Services
         public CommentService(ICommentRepository repository) {
             this.repository = repository;
         }
-        public async Task ChangeCommentAsync(int id, Comment comment)
+        public async Task ChangeCommentAsync(int userId, int id, Comment comment)
         {
             if (comment == null)
             {
                 throw new ArgumentNullException(nameof(comment));
             }
             
+            var commentToCheck = await repository.GetByIdAsync(id);
+            if(userId != commentToCheck?.UserId)
+            {
+                throw new ArgumentOutOfRangeException("comment can't be deleted by other user");
+            }
             await repository.ChangeAsync(id, comment);
         }
 
@@ -36,14 +41,23 @@ namespace MyGames.Services
             await repository.CreateAsync(comment);
         }
 
-        public async Task DeleteCommentAsync(Comment comment)
+        public async Task DeleteCommentAsync(int userId, Comment? comment)
         {
             if (comment == null || comment.Id == null)
             {
                 throw new ArgumentNullException(nameof(comment));
             }
 
-            await repository.DeleteAsync(comment);
+            var id = (int)comment.Id;
+            comment = await repository.GetByIdAsync(id);
+            
+
+            if(userId != comment?.UserId)
+            {
+                throw new ArgumentOutOfRangeException("comment can't be deleted by other user");
+            }
+
+            await repository.DeleteAsync(comment!);
         }
 
         public async Task<IEnumerable<Comment>> GetCommentsByGameAsync(int gameId)

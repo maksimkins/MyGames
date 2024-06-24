@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -75,8 +76,13 @@ namespace MyGames.Controllers
                     Id = Id
                 };
 
-                await service.DeleteCommentAsync(comment);
+                Int32.TryParse(base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value, out int userId);
+                await service.DeleteCommentAsync(userId, comment);
                 return Ok();
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(error: ex.Message);
             }
             catch(Exception ex)
             {
@@ -89,6 +95,7 @@ namespace MyGames.Controllers
         {
             try
             {
+                System.Console.WriteLine($"{comment.Text}");
                 var result = await validator.ValidateAsync(comment);
 
                 if(!result.IsValid)
@@ -100,9 +107,14 @@ namespace MyGames.Controllers
                     return BadRequest();
                 }
                 
-                await service.ChangeCommentAsync(Id, comment);
+                Int32.TryParse(base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value, out int userId);
+                await service.ChangeCommentAsync(userId, Id, comment);
 
                 return Ok();
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(error: ex.Message);
             }
             catch(Exception ex)
             {

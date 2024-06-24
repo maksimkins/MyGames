@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Comments";
     var gameId = ViewBag.gameId;
+    Int32.TryParse(base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value, out int userId);
 }
 
 <script>
@@ -89,7 +90,7 @@
       comment[`${key}`] = value;
     }
 
-    comment[`UserId`] = @base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value;
+    comment[`UserId`] = @userId;
 
     let commentJson = JSON.stringify(comment);
 
@@ -129,7 +130,7 @@
                     <li class="card-text list-group-item mb-2">@comment.Text</li>
 
                     
-                     @if(base.User.Identity?.IsAuthenticated ?? false)
+                     @if((base.User.Identity?.IsAuthenticated ?? false) && (userId == comment.UserId))
                      {
 
                       <button type="button" onclick="DeleteComment(`@JsonSerializer.Serialize(comment)`)" class="btn btn-danger">Delete comment</button>
@@ -146,6 +147,11 @@
                             <div class="mb-3">
                               <label hidden for="disabledTextInput" class="form-label">GameId</label>
                               <input hidden id="game-id" name="GameId" type="number" value="@(gameId is null ? "error" : (int)gameId)">
+                            </div>
+
+                            <div class="mb-3">
+                              <label hidden for="disabledTextInput" class="form-label">UserId</label>
+                              <input hidden id="user-id" name="UserId" type="number" value="@comment.UserId">
                             </div>
 
                             <div class="mb-3">

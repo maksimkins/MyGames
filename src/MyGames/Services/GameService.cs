@@ -19,6 +19,16 @@ namespace MyGames.Services
             return await repository.GetAllAsync();
         }
 
+        public async Task DeleteGameAsync(Game? game)
+        {
+            if (game == null || game.Id == null)
+            {
+                throw new ArgumentNullException(nameof(game));
+            }
+
+            await repository.DeleteAsync(game);
+        }
+
         public async Task<Game?> GameByIdAsync(int id)
         {
             return await repository.GetByIdAsync(id);

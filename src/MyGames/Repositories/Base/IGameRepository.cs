@@ -7,7 +7,7 @@ using MyGames.Repositories.Base.Methods;
 
 namespace MyGames.Repositories.Base
 {
-    public interface IGameRepository : IGetAllAsync<Game>, IGetByIdAsync<Game?>
+    public interface IGameRepository : IGetAllAsync<Game>, IGetByIdAsync<Game?>, IDeleteAsync<Game?>
     {
         
     }

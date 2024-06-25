@@ -21,6 +21,11 @@ namespace MyGames.Repositories.Dapper
             connectionStringOptions = option.Value;
         }
 
+        public Task DeleteAsync(Game? entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Game>> GetAllAsync()
         {
             var connection = new SqlConnection(connectionStringOptions.ConnectionString);

@@ -18,6 +18,13 @@ public class GameEFCoreRepository : IGameRepository
     {
         this.dbContext = dbContext;
     }
+
+    public async Task DeleteAsync(Game? game)
+    {
+        dbContext.Games.Remove(game!);
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task<IEnumerable<Game>> GetAllAsync()
     {
         return dbContext.Games;

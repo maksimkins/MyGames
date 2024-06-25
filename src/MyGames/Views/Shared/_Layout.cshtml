@@ -1,8 +1,10 @@
-﻿
+﻿@using System.Security.Claims
+
 @{
     var username = base.User.Claims.Where(c => c.Type == "username").FirstOrDefault()?.Value;
     var userId = base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value;
     var IsAuthenticated = base.User.Identity?.IsAuthenticated ?? false;
+    var isDeveloper = base.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value == "Developer";
 }
 <style>
 
@@ -51,10 +53,17 @@
                                 <a class="nav-link text-dark" asp-route="RegistrationView">Registration</a>
                             </li>
                         }
-                        @if(IsAuthenticated)
+                        else
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Identity" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+
+                        @if(isDeveloper)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-route="DeleteGameView">Delete Games</a>
                             </li>
                         }
                     </ul>

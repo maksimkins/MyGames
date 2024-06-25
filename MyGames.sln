@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1E8E3F35-691
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGames", "src\MyGames\MyGames.csproj", "{44F3490D-404D-484F-BAFD-1EEC466A72CF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{82B0CEDB-316C-4D57-AE32-95E40C1D7651}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGames.Tests", "test\MyGames.Tests\MyGames.Tests.csproj", "{96CA5AFF-AD37-46D6-856D-C25C89A644D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +24,13 @@ Global
 		{44F3490D-404D-484F-BAFD-1EEC466A72CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44F3490D-404D-484F-BAFD-1EEC466A72CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44F3490D-404D-484F-BAFD-1EEC466A72CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96CA5AFF-AD37-46D6-856D-C25C89A644D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96CA5AFF-AD37-46D6-856D-C25C89A644D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96CA5AFF-AD37-46D6-856D-C25C89A644D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96CA5AFF-AD37-46D6-856D-C25C89A644D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{44F3490D-404D-484F-BAFD-1EEC466A72CF} = {1E8E3F35-691C-4AE1-B201-6DEDE2B7A68A}
+		{96CA5AFF-AD37-46D6-856D-C25C89A644D4} = {82B0CEDB-316C-4D57-AE32-95E40C1D7651}
 	EndGlobalSection
 EndGlobal

@@ -1,15 +1,27 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-using System.Text.Json.Serialization;
-
-namespace MyGames.Models;
-
-public class User {
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-    [JsonPropertyName("name")]
-    public string? Name {set; get;}
-    [JsonPropertyName("surname")]
-    public string? Surname{set; get;}
-    [JsonPropertyName("birthdate")]
-    public DateTime? Birthdate {set; get;}
+namespace MyGames.Models
+{
+    public class User
+    {
+        [Key]
+        public int? Id { get; set; }
+        [Required] 
+        public string? Login{set; get;}
+        [Required] [MaxLength(60)]
+        public string? Password{set; get;}
+        [Required] [MaxLength(320)]
+        public string? Email{set; get;}
+        [Required] [MaxLength(60)]
+        public string? Username {set; get;}
+        public decimal? Balance{set; get;}
+        [Required]
+        public DateTime? Birthdate {set; get;}
+        public string? AvatarUrl{set; get;}
+    }
 }

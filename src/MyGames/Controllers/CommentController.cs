@@ -43,7 +43,6 @@ namespace MyGames.Controllers
         [HttpPost("/api/[controller]")] 
         public async Task<IActionResult> CreateComment([FromBody]Comment comment) 
         {
-            System.Console.WriteLine(comment.UserId);
             try
             {   
                 var result = await validator.ValidateAsync(comment);
@@ -95,7 +94,6 @@ namespace MyGames.Controllers
         {
             try
             {
-                System.Console.WriteLine($"{comment.Text}");
                 var result = await validator.ValidateAsync(comment);
 
                 if(!result.IsValid)

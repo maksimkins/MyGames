@@ -6,7 +6,7 @@
 
 <div asp-validation-summary="All"></div>
 
-<form asp-route="RegistrationEndpoint" method="post">
+<form enctype="multipart/form-data" asp-route="RegistrationEndpoint" method="post">
   <div class="mb-3">
     <label asp-for=Login class="form-label">Login</label>
     <input asp-for=Login type="text" class="form-control">
@@ -26,6 +26,10 @@
    <div class="mb-3">
     <label asp-for=Birthdate class="form-label">Birthdate</label>
     <input asp-for=Birthdate type="date" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="avatar" class="form-label">Avatar: </label>
+    <input type="file" class="form-control" id="avatar" name="avatar">
   </div>
   <button type="submit" class="btn btn-success">Registration</button>
 </form>

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using MyGames.Models;
 using MyGames.Services.Base;
 using FluentValidation;
+using System.Text.Json;
 
 namespace MyGames.Controllers
 {
@@ -28,7 +29,7 @@ namespace MyGames.Controllers
             this.dataProtector = dataProtectionProvider.CreateProtector("identity");
         }
 
-        [Route("/[controller]/[action]", Name = "LoginView")]
+        [HttpGet("/[controller]/[action]", Name = "LoginView")]
         public IActionResult Login(string? ReturnUrl)
         {
             var errorMessage = base.TempData["error"];
@@ -44,8 +45,7 @@ namespace MyGames.Controllers
             return base.View();
         }
 
-        [HttpPost]
-        [Route("/api/[controller]/[action]", Name = "LoginEndpoint")]
+        [HttpPost("/api/[controller]/[action]", Name = "LoginEndpoint")]
         public async Task<IActionResult> Login([FromForm] User userToLogin)
         {
             try
@@ -89,7 +89,7 @@ namespace MyGames.Controllers
             
         }
 
-        [Route("/[controller]/[action]", Name = "RegistrationView")]
+        [HttpGet("/[controller]/[action]", Name = "RegistrationView")]
         public IActionResult Registration()
         {
             if (TempData["error"] != null)
@@ -100,9 +100,8 @@ namespace MyGames.Controllers
             return base.View();
         }
 
-        [HttpPost]
-        [Route("/api/[controller]/[action]", Name = "RegistrationEndpoint")]
-        public async Task<IActionResult> Registration([FromForm] User userToRegister)
+        [HttpPost("/api/[controller]/[action]", Name = "RegistrationEndpoint")]
+        public async Task<IActionResult> Registration([FromForm] User userToRegister, IFormFile avatar)
         {
             var result = await validator.ValidateAsync(userToRegister);
 
@@ -114,6 +113,16 @@ namespace MyGames.Controllers
 
             try
             {
+                if(avatar is not null)
+                {
+                    var extension = new FileInfo(avatar.FileName).Extension[1..];
+                    userToRegister.AvatarUrl = $"Assets/Avatars/{userToRegister.Username}.{extension}";
+
+
+                    using var newFileStream = System.IO.File.Create(userToRegister.AvatarUrl);
+                    await avatar.CopyToAsync(newFileStream);
+                }
+ 
                 await service.CreateAsync(userToRegister);
             }
             catch (Exception ex)
@@ -125,13 +134,26 @@ namespace MyGames.Controllers
             return base.RedirectToRoute("LoginView");
         }
 
-        [HttpGet]
-        [Route("/api/[controller]/[action]")]
+        [HttpGet("/api/[controller]/[action]")]
         public async Task<IActionResult> Logout(string? ReturnUrl)
         {
             await base.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return base.RedirectToAction(actionName: "Index", controllerName: "Home");
+        }
+
+        [HttpGet("/api/[controller]/[action]/{id}")]
+        public async Task<IActionResult> Avatar(int id) {
+
+            var foundUser = await service.GetByIdAsync(id);
+            string? path = foundUser?.AvatarUrl;
+
+            if (foundUser == null || path == null)
+            {
+                path = "Assets/Avatars/Default.jpg";
+            }
+            var fileStream = System.IO.File.Open(path, FileMode.Open);
+            return base.File(fileStream, "profile_pic/jpeg");
         }
     }
 }

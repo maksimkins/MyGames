@@ -18,7 +18,7 @@ namespace MyGames.Services
         {
             if(user == null || user.Email == null || user.Username == null || user.Password == null || user.Login == null)
             {
-                return;
+                throw new ArgumentNullException("null params");
             }  
 
             await repository.CreateAsync(user);

@@ -1,0 +1,23 @@
+@model User
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div asp-validation-summary="All"></div>
+
+<form asp-route="LoginEndpoint" method="post">
+  <div class="mb-3">
+    <label asp-for=Login class="form-label">Login</label>
+    <input asp-for=Login type="text" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label asp-for=Password class="form-label">Password</label>
+    <input asp-for=Password type="password" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-primary">Login</button>
+</form>
+
+<div class="mt-1 ">
+    <a class="btn btn-primary" asp-route="RegistrationView" role="button">Sign Up</a>
+</div>

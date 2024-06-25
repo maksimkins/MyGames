@@ -66,6 +66,7 @@ namespace MyGames.Controllers
                     new("login", foundUser.Login!),
                     new("id", foundUser.Id.ToString()!),
                     new("username", foundUser.Username!),
+                    new(ClaimTypes.Role, foundUser.Username == "Developer" ? "Developer" : "User"),
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

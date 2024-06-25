@@ -12,7 +12,7 @@ using MyGames.Services.Base;
 
 namespace MyGames.Controllers
 {
-    [Authorize]
+    [Authorize("MyPolicy")]
     [Route("[controller]")]
     public class CommentController : Controller
     {

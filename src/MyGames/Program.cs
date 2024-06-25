@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Security.Claims;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MyGames.Middlewares;
@@ -43,7 +44,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/Identity/Login";
+        options.AccessDeniedPath = "/api/Identity/Logout";
     });
+
+builder.Services.AddAuthorization(options =>
+{
+
+    options.AddPolicy("MyPolicy", policyBuilder =>
+    {
+        policyBuilder.RequireClaim(ClaimTypes.Role, "User", "Developer");
+    });
+
+});
 
 var app = builder.Build();
 

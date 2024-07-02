@@ -11,5 +11,6 @@ namespace MyGames.Services.Base
         public Task<IEnumerable<Game>> AllGamesAsync();
         public Task<Game?> GameByIdAsync(int id);
         public Task DeleteGameAsync(Game? game);
+        public Task<IEnumerable<Game>> GetAllFromUserLibraryAsync(User user);
     }
 }

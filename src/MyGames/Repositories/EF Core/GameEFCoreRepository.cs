@@ -30,6 +30,11 @@ public class GameEFCoreRepository : IGameRepository
         return dbContext.Games;
     }
 
+    public async Task<IEnumerable<Game>> GetAllFromUserLibraryAsync(User user)
+    {
+        return dbContext.Games.Include(g => g.Users).Where(g => g.Users.Any(u => u.Id == user.Id));
+    }
+
     public async Task<Game?> GetByIdAsync(int id)
     {
         return await dbContext.Games.FirstOrDefaultAsync(game => game.Id == id);

@@ -23,5 +23,6 @@ namespace MyGames.Models
         [Required]
         public DateTime? Birthdate {set; get;}
         public string? AvatarUrl{set; get;}
+        public IEnumerable<Game> Games { get; set; } = Enumerable.Empty<Game>();
     }
 }

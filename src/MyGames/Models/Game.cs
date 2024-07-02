@@ -23,4 +23,5 @@ public class Game {
     [DefaultValue(false), Required]
     public bool? ForAdultsOnly{set; get;} = false;
     public string? PictureUrl{set; get;}
+    public IEnumerable<User> Users { get; set; } = Enumerable.Empty<User>();
 }

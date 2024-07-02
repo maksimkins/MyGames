@@ -48,7 +48,7 @@ public class CommentEFCoreRepository : ICommentRepository
 
     public async Task<IEnumerable<Comment>> GetAllByGameAsync(int gameId)
     {
-        return dbContext.Comments.Where(c => c.GameId == gameId);
+        return dbContext.Comments.Where(c => c.GameId == gameId).Include(c => c.User);
     }
 
     public async Task<Comment?> GetByIdAsync(int id)

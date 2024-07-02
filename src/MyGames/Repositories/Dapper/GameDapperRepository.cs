@@ -34,6 +34,11 @@ namespace MyGames.Repositories.Dapper
             return games;
         }
 
+        public IEnumerable<Game> GetAllFromUserLibrary(User user)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Game?> GetByIdAsync(int id)
         { 
             var connection = new SqlConnection(connectionStringOptions.ConnectionString);

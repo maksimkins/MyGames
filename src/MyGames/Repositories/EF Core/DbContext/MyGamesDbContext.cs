@@ -85,6 +85,10 @@ public class MyGamesDbContext : DbContext
         .Property(c => c.Birthdate)
         .IsRequired();
 
+        modelBuilder.Entity<User>()
+        .HasMany(u => u.Games)
+        .WithMany(g => g.Users);
+
         base.OnModelCreating(modelBuilder);
     }
 }

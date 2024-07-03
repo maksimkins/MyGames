@@ -10,5 +10,6 @@ namespace MyGames.Repositories.Base
     public interface IGameRepository : IGetAllAsync<Game>, IGetByIdAsync<Game?>, IDeleteAsync<Game?>
     {
         public Task<IEnumerable<Game>> GetAllFromUserLibraryAsync(User user);
+        // public Task AddToLibrary(int userId, int gameId);
     }
 }

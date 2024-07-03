@@ -13,126 +13,153 @@ using MyGames.Models;
 using MyGames.Services.Base;
 using FluentValidation;
 using System.Text.Json;
+using MyGames.Dtos;
+
+#pragma warning disable CS8602
+#pragma warning disable CS8604
 
 namespace MyGames.Controllers
 {
-     public class IdentityController : Controller
+    public class IdentityController : Controller
     {
-        private readonly IDataProtector dataProtector;
-        private readonly IUserService service;
+        private readonly IUserService userService;
+        private readonly IRoleService roleService;
+        private readonly IUserRoleService userRoleService;
+        private readonly IValidator<LoginDto> loginValidator;
+        private readonly IValidator<RegistrationDto> registrationValidator;
 
-        private readonly IValidator<User> validator;
-        public IdentityController(IUserService service, IDataProtectionProvider dataProtectionProvider, IValidator<User> validator)
+        public IdentityController(IUserService userService, IValidator<LoginDto> loginValidator, 
+            IValidator<RegistrationDto> registrationValidator, IUserRoleService userRoleService, IRoleService roleService)
         {
-            this.validator = validator;
-            this.service = service;
-            this.dataProtector = dataProtectionProvider.CreateProtector("identity");
+            this.userService = userService;
+            this.loginValidator = loginValidator;
+            this.registrationValidator = registrationValidator;
+            this.userRoleService = userRoleService;
+            this.roleService = roleService;
         }
+
 
         [HttpGet("/[controller]/[action]", Name = "LoginView")]
         public IActionResult Login(string? ReturnUrl)
         {
-            var errorMessage = base.TempData["error"];
-
             ViewBag.ReturnUrl = ReturnUrl;
-
-            if (errorMessage != null)
-            {
-                base.ModelState.AddModelError("All", errorMessage.ToString()!);
-            }
-
-
             return base.View();
         }
 
         [HttpPost("/api/[controller]/[action]", Name = "LoginEndpoint")]
-        public async Task<IActionResult> Login([FromForm] User userToLogin)
+        public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
         {
-            try
+            try 
             {
-                var foundUser = await service.Login(userToLogin);
+                loginDto.ReturnUrl = ViewBag.ReturnUrl as string;
 
-                if (foundUser == null)
-                {
-                    base.TempData["error"] = "Incorrect login or password!";
-                    return base.RedirectToRoute("LoginView", new
+                var validationResult = await loginValidator.ValidateAsync(loginDto);
+
+                if (!validationResult.IsValid) {
+                    foreach(var error in validationResult.Errors)
                     {
-                        ReturnUrl = "/Home/Index"
-                    });
+                        base.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                    }
+                        
+                    return base.View();
                 }
 
-                var claims = new Claim[] {
+                var foundUser = await userService.Login(loginDto);
+
+                if (foundUser == null || foundUser.Id == null)
+                    {
+                        base.TempData["error"] = "Incorrect login or password!";
+                        System.Console.WriteLine(base.TempData["error"] as string);
+                        return base.RedirectToRoute("LoginView", new
+                        {
+                            ReturnUrl = loginDto.ReturnUrl,
+                        });
+                    }
+
+                var claims = new List<Claim> {
                     new(ClaimTypes.Email, foundUser.Email!),
-                    new("login", foundUser.Login!),
-                    new("id", foundUser.Id.ToString()!),
-                    new("username", foundUser.Username!),
-                    new(ClaimTypes.Role, foundUser.Username == "Developer" ? "Developer" : "User"),
+                        new("login", foundUser.Login!),
+                        new("id", foundUser.Id.ToString()!),
+                        new("username", foundUser.Username!),
                 };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var roles = await userRoleService.GetAllRolesByUserId((int)foundUser.Id);
 
+                foreach(var role in roles)
+                    claims.Add(new Claim(ClaimTypes.Role, role.Name));
+
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
                 await base.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
+                if (string.IsNullOrWhiteSpace(loginDto.ReturnUrl) == false)
+                {
+                    return base.Redirect(loginDto.ReturnUrl);
+                }
+
+
                 return base.RedirectToAction(controllerName: "Home", actionName: "Index");
             }
-
-            catch (Exception ex)
+            catch
             {
-                base.TempData["error"] = ex.Message;
+                base.TempData["error"] = "Incorrect login or password!";
+
                 return base.RedirectToRoute("LoginView", new
                 {
-                    ReturnUrl = "/Home/Index"
+                    loginDto.ReturnUrl
                 });
             }
-
-            
         }
 
         [HttpGet("/[controller]/[action]", Name = "RegistrationView")]
         public IActionResult Registration()
         {
-            if (TempData["error"] != null)
-            {
-                ModelState.AddModelError("All", "Something went wrong. Please try again");
-            }
-
             return base.View();
         }
 
         [HttpPost("/api/[controller]/[action]", Name = "RegistrationEndpoint")]
-        public async Task<IActionResult> Registration([FromForm] User userToRegister, IFormFile avatar)
+        public async Task<IActionResult> Registration([FromForm] RegistrationDto registrationDto)
         {
-            var result = await validator.ValidateAsync(userToRegister);
-
-            if(!result.IsValid)
-            {
-                base.TempData["error"] = "fail to register";
-                return base.RedirectToRoute("RegistrationView");
-            }
-
             try
             {
-                if(avatar is not null)
-                {
-                    var extension = new FileInfo(avatar.FileName).Extension[1..];
-                    userToRegister.AvatarUrl = $"Assets/Avatars/{userToRegister.Username}.{extension}";
+                var validationResult = await registrationValidator.ValidateAsync(registrationDto);
 
+                if (!validationResult.IsValid) {
+                    foreach(var error in validationResult.Errors)
+                        base.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
 
-                    using var newFileStream = System.IO.File.Create(userToRegister.AvatarUrl);
-                    await avatar.CopyToAsync(newFileStream);
+                    return base.View();
                 }
- 
-                await service.CreateAsync(userToRegister);
+
+                await userService.CreateAsync(registrationDto);
+                var registratedUser = await userService.Login(new LoginDto() 
+                    { 
+                        Login = registrationDto.Login, 
+                        Password = registrationDto.Password
+                    }
+                );
+
+                var role = await roleService.GetByNameAsync("User");
+
+                if(registratedUser is null)
+                {
+                    throw new Exception("could't register");
+                }
+
+                await userRoleService.CreateAsync(new UserRole(){
+                    UserId = registratedUser.Id, 
+                    RoleId = role.Id,
+                });
+
+                return base.RedirectToRoute("LoginView");
             }
             catch (Exception ex)
             {
-                TempData["error"] = ex.Message;
-                return base.RedirectToRoute("RegistrationView");
+                base.TempData["error"] = ex.Message;
+                return base.View();
             }
-
-            return base.RedirectToRoute("LoginView");
         }
 
         [HttpGet("/api/[controller]/[action]")]
@@ -140,13 +167,16 @@ namespace MyGames.Controllers
         {
             await base.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return base.RedirectToAction(actionName: "Index", controllerName: "Home");
+            return base.RedirectToRoute(routeName: "LoginView", routeValues: new
+            {
+                ReturnUrl
+            });
         }
 
         [HttpGet("/api/[controller]/[action]/{id}")]
-        public async Task<IActionResult> Avatar(int id) {
-
-            var foundUser = await service.GetByIdAsync(id);
+        public async Task<IActionResult> Avatar(int id) 
+        { 
+            var foundUser = await userService.GetByIdAsync(id);
             string? path = foundUser?.AvatarUrl;
 
             if (foundUser == null || path == null)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -11,18 +12,17 @@ namespace MyGames.Models
     {
         [Key]
         public int? Id { get; set; }
-        [Required] 
+        [Required, MinLength(5), MaxLength(15)] 
         public string? Login{set; get;}
-        [Required] [MaxLength(60)]
+        [Required, MinLength(5), MaxLength(18)]
         public string? Password{set; get;}
-        [Required] [MaxLength(320)]
+        [Required] 
         public string? Email{set; get;}
-        [Required] [MaxLength(60)]
+        [Required, MinLength(5), MaxLength(18)]
         public string? Username {set; get;}
         public decimal? Balance{set; get;}
         [Required]
         public DateTime? Birthdate {set; get;}
         public string? AvatarUrl{set; get;}
-        public IEnumerable<Game> Games { get; set; } = Enumerable.Empty<Game>();
     }
 }

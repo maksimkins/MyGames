@@ -3,6 +3,8 @@
     ViewData["Title"] = "Comments";
     var gameId = ViewBag.gameId;
     Int32.TryParse(base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value, out int userId);
+
+    
 }
 
 <script>
@@ -211,6 +213,6 @@
         </div>
    }
    else {
-      <div>Sorry, yo can't write a comments untill youre not loggined <a asp-route="LoginView">click here to login</a></div>
+      <div>Sorry, yo can't write a comments untill youre not loggined <a asp-route="LoginView" asp-route-ReturnUrl="@Context.Request.Path">click here to login</a></div>
    }
         

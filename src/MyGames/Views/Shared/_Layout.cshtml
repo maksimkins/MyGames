@@ -5,6 +5,8 @@
     var userId = base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value;
     var IsAuthenticated = base.User.Identity?.IsAuthenticated ?? false;
     var isDeveloper = base.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value == "Developer";
+    var count = base.User.Claims.Where(c => c.Type == ClaimTypes.Role).Count();
+
 }
 <style>
 

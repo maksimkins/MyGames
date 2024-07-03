@@ -11,27 +11,24 @@ namespace MyGames.Validators
     {
         public UserValidator() {
             RuleFor<string?>((u) => u.Login)
-                .NotEmpty()
-                .NotNull();
+                .NotEmpty().WithMessage("Your login cannot be empty.")
+                .NotNull().WithMessage("Your login cannot be empty.");
 
             RuleFor<DateTime?>((u) => u.Birthdate)
-                .NotEmpty()
-                .NotNull();
+                .NotEmpty().WithMessage("Your birthdate cannot be empty.")
+                .NotNull().WithMessage("Your birthdate cannot be empty.");
         
             RuleFor<string?>((u) => u.Email)
-                .NotEmpty()
-                .NotNull()
-                .MaximumLength(320);
+                .NotEmpty().WithMessage("Your email cannot be empty.")
+                .NotNull().WithMessage("Your email cannot be empty.");
 
             RuleFor<string?>((u) => u.Username)
-                .NotEmpty()
-                .NotNull()
-                .MaximumLength(60);
+                .NotEmpty().WithMessage("Your username cannot be empty.")
+                .NotNull().WithMessage("Your username cannot be empty.");
 
             RuleFor<string?>((u) => u.Password)
-                .NotEmpty()
-                .NotNull()
-                .MaximumLength(60);
+                .NotEmpty().WithMessage("Your password cannot be empty.")
+                .NotNull().WithMessage("Your password cannot be empty."); 
         }
     }
 }

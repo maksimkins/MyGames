@@ -30,9 +30,15 @@ public class GameEFCoreRepository : IGameRepository
         return dbContext.Games;
     }
 
+    // public async Task AddToLibrary(int userId, int gameId)
+    // {
+    //     dbContext.US
+    //     await dbContext.Games.Where(g => g.Id == gameId).ForEachAsync(g => g.Users.Add(userId));
+    // }
+
     public async Task<IEnumerable<Game>> GetAllFromUserLibraryAsync(User user)
     {
-        return dbContext.Games.Include(g => g.Users).Where(g => g.Users.Any(u => u.Id == user.Id));
+        throw new Exception();
     }
 
     public async Task<Game?> GetByIdAsync(int id)

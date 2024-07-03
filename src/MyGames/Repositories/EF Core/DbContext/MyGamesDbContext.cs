@@ -19,6 +19,8 @@ public class MyGamesDbContext : DbContext
     public DbSet<Game> Games { get; set; }
     public DbSet<Log> Logs { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
 
     public MyGamesDbContext(IOptionsSnapshot<MsSqlconnectionOptions> option)
     {
@@ -61,6 +63,12 @@ public class MyGamesDbContext : DbContext
         .Property(c => c.GameId)
         .IsRequired();
 
+        modelBuilder.Entity<Role>()
+        .HasKey(r => r.Id);
+        modelBuilder.Entity<Role>()
+        .Property(r => r.Name)
+        .IsRequired();
+
         modelBuilder.Entity<User>()
         .HasKey(c => c.Id);
         modelBuilder.Entity<User>()
@@ -85,9 +93,6 @@ public class MyGamesDbContext : DbContext
         .Property(c => c.Birthdate)
         .IsRequired();
 
-        modelBuilder.Entity<User>()
-        .HasMany(u => u.Games)
-        .WithMany(g => g.Users);
 
         base.OnModelCreating(modelBuilder);
     }

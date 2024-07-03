@@ -34,7 +34,17 @@ namespace MyGames.Repositories.Dapper
             return games;
         }
 
+        public Task AddToLibrary(int userId, int gameId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Game> GetAllFromUserLibrary(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Game>> GetAllFromUserLibraryAsync(User user)
         {
             throw new NotImplementedException();
         }

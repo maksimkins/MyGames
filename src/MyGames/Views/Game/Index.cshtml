@@ -1,6 +1,10 @@
 @model IEnumerable<Game>;
 @{
     ViewData["Title"] = "Games";
+
+    var username = base.User.Claims.Where(c => c.Type == "username").FirstOrDefault()?.Value;
+    var userId = base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value;
+    var IsAuthenticated = base.User.Identity?.IsAuthenticated ?? false;
 }
 
 <div class="index-container">
@@ -17,6 +21,10 @@
                     <h5 class="card-title">@game.Name</h5>
                     <li class="list-group-item mb-2">@game.Price $</li>
                     <a asp-action="GameInfo" asp-route-gameId="@(game.Id)" asp-controller="Game" class="btn btn-primary">See Details</a>
+                    @* @if(IsAuthenticated)
+                    {
+                        <a asp-action="BuyGame" asp-route-gameId="@(game.Id)" asp-route-userId="@(userId)" asp-controller="Game" class="btn btn-primary">Buy</a>
+                    }  *@
                   </div>
                 </div>
             }

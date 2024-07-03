@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MyGames.Dtos;
 using MyGames.Models;
 using MyGames.Repositories.Base;
 using MyGames.Repositories.EF_Core.DbContext;
@@ -30,7 +31,7 @@ namespace MyGames.Repositories.EF_Core
             return await dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
         }
 
-        public async Task<User?> Login(User userToLog)
+        public async Task<User?> Login(LoginDto userToLog)
         {
             return await dbContext.Users.FirstOrDefaultAsync(user => user.Login == userToLog.Login && user.Password == userToLog.Password);
         }

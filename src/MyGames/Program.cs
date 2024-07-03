@@ -21,6 +21,12 @@ builder.Services.AddDbContext<MyGamesDbContext>();
 builder.Services.AddScoped<IGameRepository, GameEFCoreRepository>();
 builder.Services.AddScoped<IGameService, GameService>();
 
+builder.Services.AddScoped<IRoleRepository, RoleEFCoreRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+builder.Services.AddScoped<IUserRoleRepository, UserRoleEFCoreRepository>();
+builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+
 builder.Services.AddScoped<IUserRepository, UserEFCoreRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
@@ -52,7 +58,7 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("MyPolicy", policyBuilder =>
     {
-        policyBuilder.RequireClaim(ClaimTypes.Role, "User", "Developer");
+        policyBuilder.RequireClaim(ClaimTypes.Role, "User", "Developer", "Admin");
     });
 
 });

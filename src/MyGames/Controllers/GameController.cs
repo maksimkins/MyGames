@@ -31,6 +31,12 @@ public class GameController : Controller {
         
     }
 
+    // [HttpPost]
+    // public async Task<IActionResult> BuyGame(int userId, int gameId)
+    // {
+
+    // }
+
     [HttpGet("/[controller]/{gameId}")]
     public async Task<IActionResult> GameInfo(int gameId) 
     {

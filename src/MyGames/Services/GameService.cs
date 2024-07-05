@@ -36,9 +36,9 @@ namespace MyGames.Services
 
         public async Task<IEnumerable<Game>> GetAllFromUserLibraryAsync(User user)
         {
-            if(user.Id == null)
+            if(user.Id <= 0)
             {
-                throw new ArgumentNullException("user Id is null, couldn't find games");
+                throw new ArgumentNullException("not proper user id");
             }
             return await repository.GetAllFromUserLibraryAsync(user);
         }

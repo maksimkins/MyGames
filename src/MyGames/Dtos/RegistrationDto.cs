@@ -7,7 +7,6 @@ namespace MyGames.Dtos
 {
     public class RegistrationDto
     {
-        public string? Login{set; get;}
         public string? Username {set; get;}
         public string? Email{set; get;}
         public string? Password{set; get;}

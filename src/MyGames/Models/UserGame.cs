@@ -1,20 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyGames.Models
 {
-    public class UserRole
+    public class UserGame
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+        [ForeignKey("UserId"), Required]
         public int? UserId { get; set; }
         public User? User { get; set; }
-        [Required]
-        public int? RoleId { get; set; }
-        public Role? Role { get; set; }
+        [ForeignKey("GameId"), Required]
+        public int? GameId { get; set; }
+        public Game? Game { get; set; }
     }
 }

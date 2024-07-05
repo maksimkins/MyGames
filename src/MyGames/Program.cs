@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Security.Claims;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using MyGames.Middlewares;
 using MyGames.Models;
 using MyGames.Options;
@@ -16,28 +17,40 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<MyGamesDbContext>();
+builder.Services.AddDbContext<MyGamesDbContext>( (dbContext) =>{
+    dbContext.UseSqlServer();
+});
 
 builder.Services.AddScoped<IGameRepository, GameEFCoreRepository>();
 builder.Services.AddScoped<IGameService, GameService>();
 
-builder.Services.AddScoped<IRoleRepository, RoleEFCoreRepository>();
-builder.Services.AddScoped<IRoleService, RoleService>();
+// builder.Services.AddScoped<IRoleRepository, RoleEFCoreRepository>();
+// builder.Services.AddScoped<IRoleService, RoleService>();
 
-builder.Services.AddScoped<IUserRoleRepository, UserRoleEFCoreRepository>();
-builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 
-builder.Services.AddScoped<IUserRepository, UserEFCoreRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
+// builder.Services.AddScoped<IUserRepository, UserEFCoreRepository>();
+// builder.Services.AddScoped<IUserService, UserService>();
+
+
+//UserGame
 
 builder.Services.AddScoped<ICommentRepository, CommentEFCoreRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 
-builder.Services.AddScoped<IUserRepository, UserEFCoreRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
+// builder.Services.AddScoped<IUserRepository, UserEFCoreRepository>();
+// builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<ILogRepository, LogDapperRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
+
+builder.Services.AddIdentity<User, Role>(options => {
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    
+    options.User.RequireUniqueEmail = true;
+}).AddEntityFrameworkStores<MyGamesDbContext>();
 
 builder.Services.AddScoped<LogMiddleware>();
 

@@ -21,14 +21,6 @@ namespace MyGames.Validators
             RuleFor<string?>((u) => u.Email)
                 .NotEmpty().WithMessage("Your email cannot be empty.")
                 .NotNull().WithMessage("Your email cannot be empty.");
-
-            RuleFor<string?>((u) => u.Username)
-                .NotEmpty().WithMessage("Your username cannot be empty.")
-                .NotNull().WithMessage("Your username cannot be empty.");
-
-            RuleFor<string?>((u) => u.Password)
-                .NotEmpty().WithMessage("Your password cannot be empty.")
-                .NotNull().WithMessage("Your password cannot be empty."); 
         }
     }
 }

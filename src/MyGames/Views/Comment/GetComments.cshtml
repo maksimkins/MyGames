@@ -127,7 +127,7 @@
                 @foreach(var comment in Model) {
                 <div class="card" id="comment @comment.Id" style="width: 18rem;">
                   <div class="card-body">
-                    <h4 class="card-title">@comment.User?.Username</h4>
+                    <h4 class="card-title">@comment.User.UserName</h4>
                     <h5 class="card-title">@comment.Title</h5>
                     <li class="card-text list-group-item mb-2">@comment.Text</li>
 

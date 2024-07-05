@@ -4,25 +4,20 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyGames.Models
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        [Key]
-        public int? Id { get; set; }
         [Required, MinLength(5), MaxLength(15)] 
         public string? Login{set; get;}
-        [Required, MinLength(5), MaxLength(18)]
-        public string? Password{set; get;}
-        [Required] 
-        public string? Email{set; get;}
-        [Required, MinLength(5), MaxLength(18)]
-        public string? Username {set; get;}
+        [Column(TypeName = "decimal(18,2)")]
         public decimal? Balance{set; get;}
         [Required]
         public DateTime? Birthdate {set; get;}
-        public string? AvatarUrl{set; get;}
+        public string? AvatarUrl {set; get;}
+        public IEnumerable<UserGame>? Games {set; get;}
     }
 }

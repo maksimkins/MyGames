@@ -11,7 +11,7 @@ namespace MyGames.Validators.Identity
     {
         public LoginValidator()
         {
-            RuleFor<string?>((u) => u.Login)     
+            RuleFor<string?>((u) => u.Username)     
                 .NotEmpty().WithMessage("Your login cannot be empty.");
                 
             RuleFor<string?>((u) => u.Password)

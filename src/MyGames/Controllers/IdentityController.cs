@@ -14,28 +14,31 @@ using MyGames.Services.Base;
 using FluentValidation;
 using System.Text.Json;
 using MyGames.Dtos;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 #pragma warning disable CS8602
 #pragma warning disable CS8604
+#pragma warning disable CS1998
 
 namespace MyGames.Controllers
 {
     public class IdentityController : Controller
     {
-        private readonly IUserService userService;
-        private readonly IRoleService roleService;
-        private readonly IUserRoleService userRoleService;
         private readonly IValidator<LoginDto> loginValidator;
         private readonly IValidator<RegistrationDto> registrationValidator;
+        private readonly SignInManager<User> signInManager;
+        private readonly UserManager<User> userManager;
+        private readonly RoleManager<Role> roleManager;
 
-        public IdentityController(IUserService userService, IValidator<LoginDto> loginValidator, 
-            IValidator<RegistrationDto> registrationValidator, IUserRoleService userRoleService, IRoleService roleService)
+        public IdentityController(IValidator<LoginDto> loginValidator, IValidator<RegistrationDto> registrationValidator,
+            SignInManager<User> signInManager, UserManager<User> userManager,RoleManager<Role> roleManager)
         {
-            this.userService = userService;
             this.loginValidator = loginValidator;
             this.registrationValidator = registrationValidator;
-            this.userRoleService = userRoleService;
-            this.roleService = roleService;
+            this.roleManager = roleManager;
+            this.signInManager = signInManager;
+            this.userManager = userManager;
         }
 
 
@@ -49,68 +52,51 @@ namespace MyGames.Controllers
         [HttpPost("/api/[controller]/[action]", Name = "LoginEndpoint")]
         public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
         {
-            try 
+            loginDto.ReturnUrl = ViewBag.ReturnUrl as string;
+
+            var validationResult = await loginValidator.ValidateAsync(loginDto);
+
+            if (!validationResult.IsValid) 
             {
-                loginDto.ReturnUrl = ViewBag.ReturnUrl as string;
-
-                var validationResult = await loginValidator.ValidateAsync(loginDto);
-
-                if (!validationResult.IsValid) {
-                    foreach(var error in validationResult.Errors)
-                    {
-                        base.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                    }
-                        
-                    return base.View();
-                }
-
-                var foundUser = await userService.Login(loginDto);
-
-                if (foundUser == null || foundUser.Id == null)
-                    {
-                        base.TempData["error"] = "Incorrect login or password!";
-                        System.Console.WriteLine(base.TempData["error"] as string);
-                        return base.RedirectToRoute("LoginView", new
-                        {
-                            ReturnUrl = loginDto.ReturnUrl,
-                        });
-                    }
-
-                var claims = new List<Claim> {
-                    new(ClaimTypes.Email, foundUser.Email!),
-                        new("login", foundUser.Login!),
-                        new("id", foundUser.Id.ToString()!),
-                        new("username", foundUser.Username!),
-                };
-
-                var roles = await userRoleService.GetAllRolesByUserId((int)foundUser.Id);
-
-                foreach(var role in roles)
-                    claims.Add(new Claim(ClaimTypes.Role, role.Name));
-
-
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-                await base.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-
-                if (string.IsNullOrWhiteSpace(loginDto.ReturnUrl) == false)
+                foreach(var error in validationResult.Errors)
                 {
-                    return base.Redirect(loginDto.ReturnUrl);
+                    base.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 }
+     
+                return base.View();
+            }       
 
+            var user = await this.userManager.FindByNameAsync(loginDto.Username);
 
-                return base.RedirectToAction(controllerName: "Home", actionName: "Index");
-            }
-            catch
+            if(user == null) 
             {
+                System.Console.WriteLine($"{loginDto.Password}");
                 base.TempData["error"] = "Incorrect login or password!";
-
                 return base.RedirectToRoute("LoginView", new
                 {
-                    loginDto.ReturnUrl
+                    ReturnUrl = loginDto.ReturnUrl,
                 });
             }
+            
+            var result = await this.signInManager.PasswordSignInAsync(user, loginDto.Password, true, false);   
+
+            if(result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user, "User");
+
+                return string.IsNullOrWhiteSpace(loginDto.ReturnUrl) == false 
+                    ? base.Redirect(loginDto.ReturnUrl) 
+                    : base.RedirectToAction(controllerName: "Home", actionName: "Index");
+            }
+             
+            base.TempData["error"] = "Incorrect login or password!";
+
+            return base.RedirectToRoute("LoginView", new
+            {
+                loginDto.ReturnUrl
+            });
+            
+        
         }
 
         [HttpGet("/[controller]/[action]", Name = "RegistrationView")]
@@ -125,39 +111,34 @@ namespace MyGames.Controllers
             try
             {
                 var validationResult = await registrationValidator.ValidateAsync(registrationDto);
-
                 if (!validationResult.IsValid) {
                     foreach(var error in validationResult.Errors)
+                    {
                         base.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-
+                    }
                     return base.View();
                 }
-
-                await userService.CreateAsync(registrationDto);
-                var registratedUser = await userService.Login(new LoginDto() 
-                    { 
-                        Login = registrationDto.Login, 
-                        Password = registrationDto.Password
-                    }
-                );
-
-                var role = await roleService.GetByNameAsync("User");
-
-                if(registratedUser is null)
+                var user = new User() {
+                        Email = registrationDto.Email,
+                        UserName = registrationDto.Username,
+                        Birthdate = registrationDto.Birthdate,
+                    };
+                var result = await userManager.CreateAsync(user, registrationDto.Password);
+                if(!result.Succeeded)
                 {
-                    throw new Exception("could't register");
+                    throw new Exception();
                 }
-
-                await userRoleService.CreateAsync(new UserRole(){
-                    UserId = registratedUser.Id, 
-                    RoleId = role.Id,
-                });
-
+                if(!await roleManager.RoleExistsAsync("User"))
+                        await roleManager.CreateAsync(new Role()
+                        {
+                           Name = "User",
+                        });
+                await userManager.AddToRoleAsync(user, "User");
                 return base.RedirectToRoute("LoginView");
             }
-            catch (Exception ex)
+            catch(Exception)
             {
-                base.TempData["error"] = ex.Message;
+                base.TempData["error"] = "could't register";
                 return base.View();
             }
         }
@@ -173,13 +154,13 @@ namespace MyGames.Controllers
             });
         }
 
+        [Authorize]
         [HttpGet("/api/[controller]/[action]/{id}")]
         public async Task<IActionResult> Avatar(int id) 
         { 
-            var foundUser = await userService.GetByIdAsync(id);
-            string? path = foundUser?.AvatarUrl;
+            string? path = null;
 
-            if (foundUser == null || path == null)
+            if (path == null)
             {
                 path = "Assets/Avatars/Default.jpg";
             }

@@ -2,33 +2,44 @@
 @{
     ViewData["Title"] = "Games";
 
+    var games = Model;
+
     var username = base.User.Claims.Where(c => c.Type == "username").FirstOrDefault()?.Value;
     var userId = base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value;
     var IsAuthenticated = base.User.Identity?.IsAuthenticated ?? false;
 }
 
-<div class="index-container">
-   <div class="index d-flex justify-content-between">
-        @if(Model is null || !Model.Any()){
-            <div class="alert alert-danger" role="alert">
-                Sorry! There is no games(
-            </div>
-        }
-        else {
-            @foreach(var game in Model) {
-                <div class="card" style="width: 18rem;">
-                  <div class="card-body">
-                    <h5 class="card-title">@game.Name</h5>
-                    <li class="list-group-item mb-2">@game.Price $</li>
-                    <a asp-action="GameInfo" asp-route-gameId="@(game.Id)" asp-controller="Game" class="btn btn-primary">See Details</a>
-                    @* @if(IsAuthenticated)
-                    {
-                        <a asp-action="BuyGame" asp-route-gameId="@(game.Id)" asp-route-userId="@(userId)" asp-controller="Game" class="btn btn-primary">Buy</a>
-                    }  *@
-                  </div>
+<div class="games-wrapper">
+
+     <div class="movie-list-container">
+        <h1 class="movie-list-title">NEW RELEASES</h1>
+        <div class="movie-list-wrapper">
+            @if(Model is null || !Model.Any()){
+                    <div class="alert alert-danger" role="alert">
+                         Sorry! There is no games(
+                    </div>
+                }
+            else
+            {
+                <div class="movie-list">
+                @foreach(var game in games)
+                {   
+                    <div class="movie-list-item">
+                        <img class="movie-list-item-img" src="@game.PictureUrl" alt="">
+                        <span class="movie-list-item-title">@game.Name</span>
+                        <p class="movie-list-item-desc">@game.Description</p>
+                        <a asp-action="GameInfo" asp-route-gameId="@(game.Id)" asp-controller="Game" class="movie-list-item-button">See page</a>
+                    </div>
+                }
                 </div>
+                <i class="fas fa-chevron-right arrow"></i>
             }
-        }
-   </div>
+            
+        </div>
+    </div>
+   
+        
+
+   
 </div>
 

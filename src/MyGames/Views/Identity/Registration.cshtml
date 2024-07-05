@@ -96,10 +96,11 @@ html::-webkit-scrollbar-track {
 }
 
 .logo {
-  color: white;
+  color: #4dbf00;
   text-align: center;
-  font-size: 35px;
+  font-size: 30px;
   margin-bottom: 60px;
+  font-family: "Sen", sans-serif;
 }
 
 .login-container{
@@ -148,6 +149,9 @@ html::-webkit-scrollbar-track {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
+        rel="stylesheet">
   </head>
   <body>
 
@@ -158,35 +162,31 @@ html::-webkit-scrollbar-track {
           <div class="heder-login roboto-medium ">Registration</div>
 
           <form asp-route="RegistrationEndpoint" method="post">
-            <div class="mb-3">
-              <span class="mt-2 d-block text-danger feedback-error" asp-validation-for="Login"></span>
-              <label asp-for=Login class="form-label">Login</label>
-              <input asp-for=Login type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <span class="mt-2 d-block text-danger feedback-error" asp-validation-for="Email"></span>
+
+              <div class="mb-3">
+                <label asp-for=Username class="form-label">Username</label>
+                <input asp-for=Username type="text" class="form-control">
+                <span class="mt-2 d-block text-danger feedback-error" asp-validation-for="Username"></span>
+              </div>
+
+            <div class="mb-3">     
               <label asp-for=Email class="form-label">Email address</label>
               <input asp-for=Email type="email" class="form-control">
+              <span class="mt-2 d-block text-danger feedback-error" asp-validation-for="Email"></span>
             </div>
+          
             <div class="mb-3">
-              <span class="mt-2 d-block text-danger feedback-error" asp-validation-for="Username"></span>
-              <label asp-for=Username class="form-label">Username</label>
-              <input asp-for=Username type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-              <span class="mt-2 d-block text-danger feedback-error" asp-validation-for="Password"></span>
               <label asp-for=Password class="form-label">Password</label>
               <input asp-for=Password type="password" class="form-control">
+              <span class="mt-2 d-block text-danger feedback-error" asp-validation-for="Password"></span>
             </div>
+
              <div class="mb-3">
-              <span class="mt-2 d-block text-danger feedback-error" asp-validation-for="Birthdate"></span>
-              <label asp-for=Birthdate class="form-label">Birthdate</label>
-              <input asp-for=Birthdate type="date" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label for="avatar" class="form-label">Avatar: </label>
-              <input type="file" class="form-control" id="avatar" name="avatar">
-            </div>
+                <label asp-for=Birthdate class="form-label">Birthdate</label>
+                <input asp-for=Birthdate type="date" class="form-control">
+                <span class="mt-2 d-block text-danger feedback-error" asp-validation-for="Birthdate"></span>
+              </div>
+              
             <div class="login-button-container">
               <button type="submit" class="btn btn-primary login-button">Register</button>
             </div>

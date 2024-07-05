@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyGames.Repositories.EF_Core.DbContext;
 
@@ -11,9 +12,11 @@ using MyGames.Repositories.EF_Core.DbContext;
 namespace MyGames.Migrations
 {
     [DbContext(typeof(MyGamesDbContext))]
-    partial class MyGamesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240705115014_AddAspIdentity")]
+    partial class AddAspIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

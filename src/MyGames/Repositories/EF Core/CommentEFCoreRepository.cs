@@ -26,7 +26,6 @@ public class CommentEFCoreRepository : ICommentRepository
         if(commentToChange is null)   
             return;
        
-        commentToChange.Title = comment.Title;
         commentToChange.Text = comment.Text;
 
         dbContext.Update(commentToChange);

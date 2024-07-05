@@ -9,7 +9,9 @@ namespace MyGames.Repositories.Base
 {
     public interface IGameRepository : IGetAllAsync<Game>, IGetByIdAsync<Game?>, IDeleteAsync<Game?>
     {
-        public Task<IEnumerable<Game>> GetAllFromUserLibraryAsync(User user);
-        // public Task AddToLibrary(int userId, int gameId);
+        public Task<IEnumerable<Game?>> GetAllFromUserLibraryAsync(User user);
+        public Task<IEnumerable<Game?>> GetTopTenNewest();
+        public Task<IEnumerable<Game?>> GetTopTenMostHighRated();
+        public Task<IEnumerable<Game?>> GetGamesPagination(int page = 1, int pageSize = 10);
     }
 }

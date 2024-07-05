@@ -14,10 +14,6 @@ public class CommentValidator : AbstractValidator<Comment>
         RuleFor<string?>((c) => c.Text)
             .NotEmpty()
             .NotNull();
-        
-        RuleFor<string?>((c) => c.Title)
-            .NotEmpty()
-            .NotNull();
 
         RuleFor<int?>((c) => c.GameId)
             .NotNull()

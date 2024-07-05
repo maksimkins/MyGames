@@ -11,8 +11,6 @@ namespace MyGames.Models
 {
     public class User : IdentityUser<int>
     {
-        [Required, MinLength(5), MaxLength(15)] 
-        public string? Login{set; get;}
         [Column(TypeName = "decimal(18,2)")]
         public decimal? Balance{set; get;}
         [Required]

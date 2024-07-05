@@ -17,25 +17,10 @@ public class GameController : Controller {
     }
     
     [HttpGet("/[controller]")]
-    public async Task<IActionResult> Index ()
+    public IActionResult Index ()
     {
-        try
-        {
-            var games = await service.AllGamesAsync();
-            return View(games);
-        }
-        catch(Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
-        
+        return View(); 
     }
-
-    // [HttpPost]
-    // public async Task<IActionResult> BuyGame(int userId, int gameId)
-    // {
-
-    // }
 
     [HttpGet("/[controller]/{gameId}")]
     public async Task<IActionResult> GameInfo(int gameId) 

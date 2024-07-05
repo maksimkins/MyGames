@@ -30,19 +30,28 @@ public class GameEFCoreRepository : IGameRepository
         return dbContext.Games;
     }
 
-    // public async Task AddToLibrary(int userId, int gameId)
-    // {
-    //     dbContext.US
-    //     await dbContext.Games.Where(g => g.Id == gameId).ForEachAsync(g => g.Users.Add(userId));
-    // }
-
-    public async Task<IEnumerable<Game>> GetAllFromUserLibraryAsync(User user)
+    public async Task<IEnumerable<Game?>> GetAllFromUserLibraryAsync(User user)
     {
-        throw new Exception();
+        return dbContext.UserGames.Where(ug => ug.UserId == user.Id).Include(ug => ug.Game).Select(ug => ug.Game);
     }
 
     public async Task<Game?> GetByIdAsync(int id)
     {
         return await dbContext.Games.FirstOrDefaultAsync(game => game.Id == id);
+    }
+
+    public async Task<IEnumerable<Game?>> GetGamesPagination(int page = 1, int pageSize = 10)
+    {
+        return dbContext.Games.Skip((page - 1) * pageSize).Take(pageSize);
+    }
+
+    public async Task<IEnumerable<Game?>> GetTopTenMostHighRated()
+    {
+        return dbContext.Games.OrderBy(g => g.Rate).Take(10);
+    }
+
+    public async Task<IEnumerable<Game?>> GetTopTenNewest()
+    {
+        return dbContext.Games.OrderBy(g => g.CreationDate).Take(10);
     }
 }

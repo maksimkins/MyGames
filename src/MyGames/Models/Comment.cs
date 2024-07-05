@@ -13,7 +13,6 @@ namespace MyGames.Models;
         [ForeignKey("GameId"), Required]
         public int? GameId { get; set; }
         public Game? Game { get; set; }
-        public string? Title {set; get;}
         public string? Text {set; get;}
         [Required]
         public DateTime? CreationDate{set; get;}

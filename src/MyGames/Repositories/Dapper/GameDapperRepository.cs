@@ -60,5 +60,20 @@ namespace MyGames.Repositories.Dapper
             
             return game;
         }
+
+        public Task<IEnumerable<Game?>> GetTopTenNewest()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Game?>> GetTopTenMostHighRated()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Game?>> GetGamesPagination(int page = 1, int pageSize = 10)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

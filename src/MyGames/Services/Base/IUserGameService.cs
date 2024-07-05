@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MyGames.Models;
-using MyGames.Repositories.Base.Methods;
 
-namespace MyGames.Repositories.Base
+namespace MyGames.Services.Base
 {
-    public interface IUserGameRepository : ICreateAsync<UserGame>
+    public interface IUserGameService
     {
+        public Task BuyAsync(User? user, Game? game);
         public Task<IEnumerable<Game?>> GetAllUsersGames(int userId);
-        public Task<bool> HasUserGame(int gameId, int userId);
+        public Task<bool> HasUserGame(User? user, Game? game);
     }
 }

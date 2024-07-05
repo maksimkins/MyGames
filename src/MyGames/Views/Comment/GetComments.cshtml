@@ -1,10 +1,15 @@
 @model IEnumerable<Comment>;
+@inject UserManager<User> userManager;
 @{
     ViewData["Title"] = "Comments";
-    var gameId = ViewBag.gameId;
-    Int32.TryParse(base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value, out int userId);
 
-    
+    var IsAuthenticated = base.User.Identity?.IsAuthenticated ?? false;
+    var isDeveloper = base.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value == "Developer";
+    var userName =  User.FindFirstValue(ClaimTypes.Name);
+    User? user = IsAuthenticated ? await userManager.FindByNameAsync(userName!) : null;
+    var userId = user?.Id;
+
+    var gameId = ViewBag.gameId;
 }
 
 <script>
@@ -112,11 +117,67 @@
           console.log(err.message);
         });
   }
-
 </script>
 
+
+<style>
+  .comment-section {  
+    background-color: #333; /* Dark gray background */  
+    padding: 20px;  
+    width: 60%;
+    border-radius: 10px;  
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  
+    margin-left: 90px;
+  }  
+ .comment-header {  
+    color: #fff; /* White text */  
+    font-size: 18px;  
+    margin-bottom: 10px;  
+  }  
+ .comment-input {  
+    width: 50%;  
+    height: 100px;  
+    padding: 10px;  
+    font-size: 16px;  
+    border: none;  
+    border-radius: 10px;  
+    background-color: #444; /* Dark gray background */  
+    color: #fff; /* White text */  
+  }  
+ .comment-submit {  
+    background-color: #666; /* Dark gray background */  
+    color: #fff; /* White text */  
+    padding: 10px 20px;  
+    border: none;  
+    border-radius: 10px;  
+    cursor: pointer;  
+  }  
+ .comment-submit:hover {  
+    background-color: #777; /* Darker gray background on hover */  
+  }  
+ .comment-list {  
+    margin-top: 20px;  
+  }  
+
+  .comments-container{
+    margin-left: 30px;
+  }
+
+  .comments-container.active {
+    background-color: white;
+
+    color: black;
+  }
+  .comments-container {
+    background-color: #151515;
+
+    color: white;
+  }
+</style>
+
+
 <div class="comments-container">
-   <div class="comments d-flex flex-wrap justify-content-between">
+   <div class="comments">
         @if(Model is null || !Model.Any()){
             <div class="alert alert-danger" role="alert">
                 Sorry! There is no comments for this game(
@@ -125,11 +186,13 @@
         else {
             <div id="comments-wrapper" class="comments d-flex flex-wrap justify-content-between mb-3">
                 @foreach(var comment in Model) {
+
+
+
                 <div class="card" id="comment @comment.Id" style="width: 18rem;">
                   <div class="card-body">
-                    <h4 class="card-title">@comment.User.UserName</h4>
-                    <h5 class="card-title">@comment.Title</h5>
-                    <li class="card-text list-group-item mb-2">@comment.Text</li>
+                    <h4 class="card-title">@comment?.User?.UserName</h4>
+                    <li class="card-text list-group-item mb-2">@comment?.Text</li>
 
                     
                      @if((base.User.Identity?.IsAuthenticated ?? false) && (userId == comment.UserId))
@@ -162,11 +225,6 @@
                             </div>
 
                         <div class="mb-3">
-                          <label for="exampleInputEmail1" class="form-label">Title</label>
-                          <input id="title" name="Title" type="text" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
                           <label for="exampleInputPassword1" class="form-label">Text</label>
                           <input id="text" name="Text" type="text" class="form-control">
                         </div>
@@ -190,27 +248,22 @@
         
    @if(base.User.Identity?.IsAuthenticated ?? false)
    {
-      <div>
-            <form id="comment-post-form" onsubmit="return false;">
-                <legend>Write a new comment!!</legend>
-                  <div class="mb-3">
-                    <label hidden for="disabledTextInput" class="form-label">GameId</label>
-                    <input hidden name="GameId" type="text" value="@(gameId is null ? "error" : (int)gameId)">
-                  </div>
 
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Title</label>
-                <input name="Title" type="text" class="form-control">
-              </div>
+    <div class="comment-section">  
+      <h2 class="comment-header">Leave a Comment</h2>  
+      <form id="comment-post-form" onsubmit="return false;">  
+        <label hidden for="disabledTextInput" class="form-label">GameId</label>
+        <input hidden name="GameId" type="text" value="@(gameId is null ? "error" : (int)gameId)">
 
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Text</label>
-                <input name="Text" type="text" class="form-control">
-              </div>
+        <textarea placeholder="Write your comment here..." name="Text" class="comment-input"></textarea>  
 
-              <button onclick="PostComment(`comment-post-form`)" type="submit" class="btn btn-primary">Submit comment</button>
-            </form>
-        </div>
+        <button onclick="PostComment(`comment-post-form`)"  class="comment-submit">Submit</button>  
+      </form>  
+     
+    </div> 
+
+
+  
    }
    else {
       <div>Sorry, yo can't write a comments untill youre not loggined <a asp-route="LoginView" asp-route-ReturnUrl="@Context.Request.Path">click here to login</a></div>

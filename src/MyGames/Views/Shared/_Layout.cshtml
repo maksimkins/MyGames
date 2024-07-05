@@ -1,12 +1,11 @@
 ﻿@inject UserManager<User> userManager
 
 @{
-    var userName =  User.FindFirstValue(ClaimTypes.Name);
-    var user = await userManager.FindByNameAsync(userName!);
-    var userId = user?.Id;
     var IsAuthenticated = base.User.Identity?.IsAuthenticated ?? false;
     var isDeveloper = base.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value == "Developer";
-
+    var userName =  User.FindFirstValue(ClaimTypes.Name);
+    User? user = IsAuthenticated ? await userManager.FindByNameAsync(userName!) : null;
+    var userId = user?.Id;
 }
 <style>
 
@@ -28,9 +27,14 @@
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
 </head>
 
-
+<style>
+    .to-margin-left{
+        margin-left: 30px;
+    }
+</style>
 
 <body>
     <div class="navbar">
@@ -76,23 +80,17 @@
     <div class="sidebar">
         <i class="left-menu-icon fas fa-search"></i>
         <a asp-area="" asp-controller="Home" asp-action="Index" class="left-menu-icon fas fa-home"></a>
-        <i class="left-menu-icon fas fa-users"></i>
-        <i class="left-menu-icon fas fa-bookmark"></i>
+        <i class="left-menu-icon fa-solid fa-basket-shopping"></i>
         <a asp-area="" asp-controller="Game" asp-action="Index" class="left-menu-icon fas fa-shopping-cart"></a>
         
     </div>
 
-    <div class="container">
+    <div class="container to-margin-left">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container is-fluid">
-            &copy; 2024 - MyGames - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     @* <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="~/js/site.js" asp-append-version="true"></script>

@@ -150,16 +150,16 @@ body {
   font-weight: bold;
 }
 
-.movie-list-container {
-  padding: 0 20px;
+.game-list-container {
+  padding: 10px 0 0 20px;
 }
 
-.movie-list-wrapper {
+.game-list-wrapper {
   position: relative;
   overflow: hidden;
 }
 
-.movie-list {
+.game-list {
   display: flex;
   align-items: center;
   height: 300px;
@@ -167,24 +167,24 @@ body {
   transition: all 1s ease-in-out;
 }
 
-.movie-list-item {
+.game-list-item {
   margin-right: 30px;
   position: relative;
 }
 
-.movie-list-item:hover .movie-list-item-img {
+.game-list-item:hover .game-list-item-img {
   transform: scale(1.2);
   margin: 0 30px;
   opacity: 0.5;
 }
 
-.movie-list-item:hover .movie-list-item-title,
-.movie-list-item:hover .movie-list-item-desc,
-.movie-list-item:hover .movie-list-item-button {
+.game-list-item:hover .game-list-item-title,
+.game-list-item:hover .game-list-item-desc,
+.game-list-item:hover .game-list-item-button {
   opacity: 1;
 }
 
-.movie-list-item-img {
+.game-list-item-img {
   transition: all 1s ease-in-out;
   width: 270px;
   height: 200px;
@@ -192,10 +192,10 @@ body {
   border-radius: 20px;
 }
 
-.movie-list-item-title {
+.game-list-item-title {
   background-color: #333;
   padding: 0 10px;
-  font-size: 32px;
+  font-size: 20px;
   font-weight: bold;
   position: absolute;
   top: 10%;
@@ -204,7 +204,7 @@ body {
   transition: 1s all ease-in-out;
 }
 
-.movie-list-item-desc {
+.game-list-item-desc {
   background-color: #333;
   padding: 10px;
   font-size: 14px;
@@ -216,7 +216,7 @@ body {
   transition: 1s all ease-in-out;
 }
 
-.movie-list-item-button {
+.game-list-item-button {
   padding: 10px;
   background-color: #4dbf00;
   color: white;
@@ -231,7 +231,7 @@ body {
   transition: 1s all ease-in-out;
 }
 
-.arrow {
+.arrow-right {
   font-size: 120px;
   position: absolute;
   top: 90px;
@@ -241,11 +241,21 @@ body {
   cursor: pointer;
 }
 
+.arrow-left {
+  font-size: 120px;
+  position: absolute;
+  top: 90px;
+  left: 0;
+  color: lightgray;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
 .container.active {
   background-color: white;
 }
 
-.movie-list-title.active {
+.game-list-title.active {
   color: black;
 }
 

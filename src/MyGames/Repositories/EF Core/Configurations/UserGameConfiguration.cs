@@ -26,6 +26,10 @@ namespace MyGames.Repositories.EF_Core.Configurations
                 .WithMany(ug => ug.Games)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
+
+            builder
+                .HasIndex(ug => new {ug.UserId , ug.GameId})
+                .IsUnique();
         }
     }
 }

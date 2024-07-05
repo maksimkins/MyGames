@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyGames.Models;
 using MyGames.Services.Base;
@@ -18,10 +19,17 @@ namespace MyGames.Controllers
     {
         private readonly ICommentService service;
         private readonly IValidator<Comment> validator;
-        public CommentController(ICommentService service, IValidator<Comment> validator) 
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+        private readonly RoleManager<Role> roleManager;
+        public CommentController(ICommentService service, IValidator<Comment> validator, 
+            SignInManager<User> signInManager, UserManager<User> userManager, RoleManager<Role> roleManager) 
         {
             this.service = service;
             this.validator = validator;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         [AllowAnonymous]
@@ -44,7 +52,7 @@ namespace MyGames.Controllers
         public async Task<IActionResult> CreateComment([FromBody]Comment comment) 
         {
             try
-            {   
+            {  
                 var result = await validator.ValidateAsync(comment);
 
                 if(!result.IsValid)
@@ -75,7 +83,10 @@ namespace MyGames.Controllers
                     Id = Id
                 };
 
-                Int32.TryParse(base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value, out int userId);
+                var userName =  base.User.FindFirstValue(ClaimTypes.Name);
+                var user = await userManager.FindByNameAsync(userName!);
+                var userId = user?.Id ?? 0;
+                
                 await service.DeleteCommentAsync(userId, comment);
                 return Ok();
             }
@@ -105,7 +116,10 @@ namespace MyGames.Controllers
                     return BadRequest();
                 }
                 
-                Int32.TryParse(base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value, out int userId);
+                var userName =  base.User.FindFirstValue(ClaimTypes.Name);
+                var user = await userManager.FindByNameAsync(userName!);
+                var userId = user?.Id ?? 0;
+
                 await service.ChangeCommentAsync(userId, Id, comment);
 
                 return Ok();

@@ -146,7 +146,7 @@ namespace MyGames.Controllers
         [HttpGet("/api/[controller]/[action]")]
         public async Task<IActionResult> Logout(string? ReturnUrl)
         {
-            await base.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await this.signInManager.SignOutAsync();
 
             return base.RedirectToRoute(routeName: "LoginView", routeValues: new
             {

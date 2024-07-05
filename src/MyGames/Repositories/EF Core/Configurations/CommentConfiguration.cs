@@ -20,10 +20,6 @@ namespace MyGames.Repositories.EF_Core.Configurations
                 .IsRequired();
 
             builder
-                .Property(c => c.Title)
-                .IsRequired();
-
-            builder
                 .Property(c => c.Rate)
                 .IsRequired();
 

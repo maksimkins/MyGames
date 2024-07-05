@@ -1,40 +1,64 @@
-@model IEnumerable<Game>;
+@using MyGames.Services.Base
+@inject IGameService gameService;
+@inject UserManager<User> userManager;
 @{
     ViewData["Title"] = "Games";
 
-    var games = Model;
-
-    var username = base.User.Claims.Where(c => c.Type == "username").FirstOrDefault()?.Value;
-    var userId = base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value;
     var IsAuthenticated = base.User.Identity?.IsAuthenticated ?? false;
+    var isDeveloper = base.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value == "Developer";
+    var userName =  User.FindFirstValue(ClaimTypes.Name);
+    User? user = IsAuthenticated ? await userManager.FindByNameAsync(userName!) : null;
+    var userId = user?.Id;
+    
+
+    var newGames = await gameService.GetTopTenNewest();
+    var highRatedGames = await gameService.GetTopTenMostHighRated();
 }
+
+<style>
+    .game-list-item-title{
+        background-color: transparent;
+    }
+
+    .games-wrapper{
+        @* padding-right: 0px;; *@
+    }
+</style>
 
 <div class="games-wrapper">
 
-     <div class="movie-list-container">
-        <h1 class="movie-list-title">NEW RELEASES</h1>
-        <div class="movie-list-wrapper">
-            @if(Model is null || !Model.Any()){
-                    <div class="alert alert-danger" role="alert">
-                         Sorry! There is no games(
-                    </div>
-                }
-            else
-            {
-                <div class="movie-list">
-                @foreach(var game in games)
-                {   
-                    <div class="movie-list-item">
-                        <img class="movie-list-item-img" src="@game.PictureUrl" alt="">
-                        <span class="movie-list-item-title">@game.Name</span>
-                        <p class="movie-list-item-desc">@game.Description</p>
-                        <a asp-action="GameInfo" asp-route-gameId="@(game.Id)" asp-controller="Game" class="movie-list-item-button">See page</a>
-                    </div>
-                }
+     <div class="game-list-container">
+        <div class="game-list-container">
+        <h1 class="game-list-title">NEW RELEASES</h1>
+        <div class="game-list-wrapper">
+            <div class="game-list">
+            @foreach(var game in newGames)
+            {   
+                <div class="game-list-item">
+                    <img class="game-list-item-img" src="@game?.PictureUrl" alt="">
+                    <span class="game-list-item-title">@game?.Name</span>
+                    <a asp-action="GameInfo" asp-route-gameId="@(game?.Id)" asp-controller="Game" class="game-list-item-button">See page</a>
                 </div>
-                <i class="fas fa-chevron-right arrow"></i>
             }
-            
+            </div>
+            <i class="fas fa-chevron-right arrow-right"></i>
+        </div>
+        </div>
+
+        <div class="game-list-container">
+        <h1 class="game-list-title">THE MOST HIGH RATED</h1>
+        <div class="game-list-wrapper">
+            <div class="game-list">
+            @foreach(var game in highRatedGames)
+            {   
+                <div class="game-list-item">
+                    <img class="game-list-item-img" src="@game?.PictureUrl" alt="">
+                    <span class="game-list-item-title">@game?.Name</span>
+                    <a asp-action="GameInfo" asp-route-gameId="@(game?.Id)" asp-controller="Game" class="game-list-item-button">See page</a>
+                </div>
+            }
+            </div>
+            <i class="fas fa-chevron-right arrow-right"></i>
         </div>
     </div>
    

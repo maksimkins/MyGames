@@ -10,7 +10,7 @@ namespace MyGames.Validators
     public class UserValidator : AbstractValidator<User>
     {
         public UserValidator() {
-            RuleFor<string?>((u) => u.Login)
+            RuleFor<string?>((u) => u.UserName)
                 .NotEmpty().WithMessage("Your login cannot be empty.")
                 .NotNull().WithMessage("Your login cannot be empty.");
 

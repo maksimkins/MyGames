@@ -3,7 +3,7 @@
     ViewData["Title"] = "GameInfo";
     var game = Model;
 }
-<div class="game-info-container">
+@* <div class="game-info-container">
    <div class="game-info d-flex">
         @if(Model is null){
             <div class="alert alert-danger" role="alert">
@@ -23,4 +23,135 @@
 
         
    </div>
-</div>
+</div> *@
+@if(game is null){
+    <div class="alert alert-danger" role="alert">
+        Sorry! There is no details info about this game(
+    </div>
+    }
+else{
+    <section class="game-info">  
+        <div class="game-details">  
+        <h2>@game.Name</h2>  
+        <p>Release Date: @(game.CreationDate.HasValue ? game.CreationDate.Value.Date : 0)</p>  
+        <p>Description: @game.Description</p>  
+        <button class="buy-button">Buy Now</button> 
+        <a asp-action="GetComments" asp-route-gameId="@(game?.Id)" asp-controller="Comment" class="btn btn-primary">See Comments</a> 
+        </div>  
+        <img class="game-cover" alt="Game Cover Art" src="@game.PictureUrl">  
+    </section>  
+    <section class="game-screenshots">  
+        <h2>Screenshots</h2>  
+        <div class="screenshot-grid">  
+        <img alt="Screenshot 1" src="screenshot1.jpg">  
+        <img alt="Screenshot 2" src="screenshot2.jpg">  
+        <img alt="Screenshot 3" src="screenshot3.jpg">  
+        </div>  
+    </section>  
+    <section class="game-system-req">  
+        <h2>System Requirements</h2>  
+        <ul>  
+        <li>Operating System: Windows 10 (64-bit)</li>  
+        <li>Processor: Intel Core i5-2400 or AMD equivalent</li>  
+        <li>Memory: 8 GB RAM</li>  
+        <li>Graphics: NVIDIA GeForce GTX 660 or AMD equivalent</li>  
+        <li>Storage: 20 GB available space</li>  
+        </ul>  
+    </section> 
+}
+ 
+
+<style>
+    
+.game-info {  
+color: #666;  
+  font-family: Arial, sans-serif;  
+  background-color: #f5f5f5;  
+  display: flex;  
+  flex-wrap: wrap;  
+  justify-content: space-between;  
+  align-items: center;  
+  padding: 20px;  
+  border: 1px solid #ddd;  
+  border-radius: 10px;  
+  margin: 20px;  
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);  
+}  
+  
+.game-details {  
+  flex-basis: 60%;  
+}  
+  
+.game-cover {  
+  flex-basis: 40%;  
+  width: 400px;  
+  height: 350px;  
+  object-fit: cover;  
+  border-radius: 10px 10px 0 0;  
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);  
+}  
+  
+.buy-button {  
+  background-color: #4CAF50;  
+  color: #fff;  
+  padding: 10px 20px;  
+  border: none;  
+  border-radius: 5px;  
+  cursor: pointer;  
+  transition: background-color 0.2s ease;  
+}  
+  
+.buy-button:hover {  
+  background-color: #3e8e41;  
+}  
+  
+.game-screenshots { 
+    color: #666;  
+  font-family: Arial, sans-serif;  
+  background-color: #f5f5f5;  
+  margin-top: 20px;  
+}  
+  
+.screenshot-grid {  
+  display: grid;  
+  grid-template-columns: repeat(3, 1fr);  
+  grid-gap: 10px;  
+}  
+  
+.screenshot-grid img {  
+  width: 100%;  
+  height: 150px;  
+  object-fit: cover;  
+  border-radius: 10px;  
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);  
+}  
+  
+.game-system-req { 
+    color: #666;  
+  font-family: Arial, sans-serif;  
+  background-color: #f5f5f5;  
+  margin-top: 20px;  
+  background-color: #f7f7f7;  
+  padding: 20px;  
+  border: 1px solid #ddd;  
+  border-radius: 10px;  
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);  
+}  
+  
+.game-system-req ul {  
+  list-style: none;  
+  padding: 0;  
+  margin: 0;  
+}  
+  
+.game-system-req li {  
+  margin-bottom: 10px;  
+  color: #666;  
+}  
+  
+.game-system-req li::before {  
+  content: "\2022";  
+  margin-right: 10px;  
+  color: #666;  
+}  
+</style>

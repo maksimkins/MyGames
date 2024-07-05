@@ -3,21 +3,23 @@
 
 // Write your JavaScript code.
 
-const arrows = document.querySelectorAll(".arrow");
-const movieLists = document.querySelectorAll(".movie-list");
+const arrowsRight = document.querySelectorAll(".arrow-right");
+const arrowsLeft = document.querySelectorAll(".arrow-left");
 
-arrows.forEach((arrow, i) => {
-  const itemNumber = movieLists[i].querySelectorAll("img").length;
+const gameLists = document.querySelectorAll(".game-list");
+
+arrowsRight.forEach((arrowRight, i) => {
+  const itemNumber = gameLists[i].querySelectorAll("img").length;
   let clickCounter = 0;
-  arrow.addEventListener("click", () => {
+  arrowRight.addEventListener("click", () => {
     const ratio = Math.floor(window.innerWidth / 270);
     clickCounter++;
     if (itemNumber - (4 + clickCounter) + (4 - ratio) >= 0) {
-      movieLists[i].style.transform = `translateX(${
-        movieLists[i].computedStyleMap().get("transform")[0].x.value - 300
+      gameLists[i].style.transform = `translateX(${
+        gameLists[i].computedStyleMap().get("transform")[0].x.value - 300
       }px)`;
     } else {
-      movieLists[i].style.transform = "translateX(0)";
+      gameLists[i].style.transform = "translateX(0)";
       clickCounter = 0;
     }
   });
@@ -25,11 +27,12 @@ arrows.forEach((arrow, i) => {
   console.log(Math.floor(window.innerWidth / 270));
 });
 
+
 //TOGGLE
 
 const ball = document.querySelector(".toggle-ball");
 const items = document.querySelectorAll(
-  ".container,.movie-list-title,.navbar-container,.sidebar,.left-menu-icon,.toggle"
+  ".container,.game-list-title,.navbar-container,.sidebar,.left-menu-icon,.toggle,.comments-container,.comments"
 );
 
 ball.addEventListener("click", () => {

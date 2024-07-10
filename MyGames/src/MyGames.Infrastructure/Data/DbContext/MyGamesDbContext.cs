@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace MyGames.Core.Data.DbContext;
+namespace MyGames.Infrastructure.Data.DbContext;
 
 using MyGames.Core.Game.Models;
 using MyGames.Core.Log.Models;

@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MyGames.Core.Migrations
+namespace MyGames.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDDD : Migration
+    public partial class GetDbToInfrastructure : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

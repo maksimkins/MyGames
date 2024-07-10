@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MyGames.Infrastructure.Comment.Repositories.Ef_Core;
 
 using MyGames.Core.Comment.Repositories.Base;
-using MyGames.Core.Data.DbContext;
+using MyGames.Infrastructure.Data.DbContext;
 using MyGames.Core.Comment.Models;
 
 public class CommentEFCoreRepository : ICommentRepository

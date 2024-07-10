@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyGames.Core.Data.DbContext;
+using MyGames.Infrastructure.Data.DbContext;
 
 #nullable disable
 
-namespace MyGames.Core.Migrations
+namespace MyGames.Infrastructure.Migrations
 {
     [DbContext(typeof(MyGamesDbContext))]
     partial class MyGamesDbContextModelSnapshot : ModelSnapshot

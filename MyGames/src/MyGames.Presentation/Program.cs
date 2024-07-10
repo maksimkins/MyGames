@@ -1,4 +1,4 @@
-using MyGames.Core.Data.DbContext;
+using MyGames.Infrastructure.Data.DbContext;
 
 using MyGames.Core.Options.MsSqlConnection;
 

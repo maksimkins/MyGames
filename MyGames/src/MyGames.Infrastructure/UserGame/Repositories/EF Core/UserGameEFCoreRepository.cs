@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MyGames.Infrastructure.UserGame.Repositories.Ef_Core;
 
 using MyGames.Core.UserGame.Repositories.Base;
-using MyGames.Core.Data.DbContext;
+using MyGames.Infrastructure.Data.DbContext;
 using MyGames.Core.UserGame.Models;
 using MyGames.Core.Game.Models;
 

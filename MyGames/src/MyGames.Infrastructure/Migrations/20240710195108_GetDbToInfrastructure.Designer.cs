@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyGames.Core.Data.DbContext;
+using MyGames.Infrastructure.Data.DbContext;
 
 #nullable disable
 
-namespace MyGames.Core.Migrations
+namespace MyGames.Infrastructure.Migrations
 {
     [DbContext(typeof(MyGamesDbContext))]
-    [Migration("20240710190645_Init_DDD")]
-    partial class InitDDD
+    [Migration("20240710195108_GetDbToInfrastructure")]
+    partial class GetDbToInfrastructure
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

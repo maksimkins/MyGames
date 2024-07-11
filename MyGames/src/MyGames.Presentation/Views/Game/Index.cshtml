@@ -2,7 +2,6 @@
 @using MyGames.Core.Game.Models;
 @using MyGames.Core.User.Models;
 
-@inject IGameService gameService;
 @inject UserManager<User> userManager;
 @{
     ViewData["Title"] = "Games";
@@ -12,61 +11,5 @@
     var userName =  User.FindFirstValue(ClaimTypes.Name);
     User? user = IsAuthenticated ? await userManager.FindByNameAsync(userName!) : null;
     var userId = user?.Id;
-    
-
-    var newGames = await gameService.GetTopTenNewest();
-    var highRatedGames = await gameService.GetTopTenMostHighRated();
 }
-
-<style>
-    .game-list-item-title{
-        background-color: transparent;
-    }
-
-    .games-wrapper{
-        @* padding-right: 0px;; *@
-    }
-</style>
-
-<div class="games-wrapper">
-
-     <div class="game-list-container">
-        <div class="game-list-container">
-        <h1 class="game-list-title">NEW RELEASES</h1>
-        <div class="game-list-wrapper">
-            <div class="game-list">
-            @foreach(var game in newGames)
-            {   
-                <div class="game-list-item">
-                    <img class="game-list-item-img" src="@game?.PictureUrl" alt="">
-                    <span class="game-list-item-title">@game?.Name</span>
-                    <a asp-action="GameInfo" asp-route-gameId="@(game?.Id)" asp-controller="Game" class="game-list-item-button">See page</a>
-                </div>
-            }
-            </div>
-            <i class="fas fa-chevron-right arrow-right"></i>
-        </div>
-        </div>
-
-        <div class="game-list-container">
-        <h1 class="game-list-title">THE MOST HIGH RATED</h1>
-        <div class="game-list-wrapper">
-            <div class="game-list">
-            @foreach(var game in highRatedGames)
-            {   
-                <div class="game-list-item">
-                    <img class="game-list-item-img" src="@game?.PictureUrl" alt="">
-                    <span class="game-list-item-title">@game?.Name</span>
-                    <a asp-action="GameInfo" asp-route-gameId="@(game?.Id)" asp-controller="Game" class="game-list-item-button">See page</a>
-                </div>
-            }
-            </div>
-            <i class="fas fa-chevron-right arrow-right"></i>
-        </div>
-    </div>
-   
-        
-
-   
-</div>
 

@@ -1,9 +1,18 @@
 @using MyGames.Core.Game.Models;
+@using MyGames.Core.User.Models;
+
+@inject UserManager<User> userManager
 
 @model Game;
 @{
     ViewData["Title"] = "GameInfo";
     var game = Model;
+
+    var IsAuthenticated = base.User.Identity?.IsAuthenticated ?? false;
+    var isDeveloper = base.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value == "Developer";
+    var userName =  User.FindFirstValue(ClaimTypes.Name);
+    User? user = IsAuthenticated ? await userManager.FindByNameAsync(userName!) : null;
+    var userId = user?.Id;
 }
 
 @if(game is null){
@@ -17,7 +26,10 @@ else{
         <h2>@game.Name</h2>  
         <p>Release Date: @(game.CreationDate.HasValue ? game.CreationDate.Value.Date : 0)</p>  
         <p>Description: @game.Description</p>  
-        <button class="buy-button">Buy Now</button> 
+        @if(IsAuthenticated)
+        {
+          <button class="buy-button">Buy Now</button> 
+        }
         <a asp-action="GetComments" asp-route-gameId="@(game?.Id)" asp-controller="Comment" class="btn btn-primary">See Comments</a> 
         </div>  
         <img class="game-cover" alt="Game Cover Art" src="@game?.PictureUrl">  

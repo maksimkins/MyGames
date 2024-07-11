@@ -16,7 +16,7 @@ arrowsRight.forEach((arrowRight, i) => {
     clickCounter++;
     if (itemNumber - (4 + clickCounter) + (4 - ratio) >= 0) {
       gameLists[i].style.transform = `translateX(${
-        gameLists[i].computedStyleMap().get("transform")[0].x.value - 300
+        gameLists[i].computedStyleMap().get("transform")[0].x.value - 350
       }px)`;
     } else {
       gameLists[i].style.transform = "translateX(0)";

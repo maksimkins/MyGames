@@ -29,6 +29,11 @@ public class UserGameService : IUserGameService
 
     public async Task<IEnumerable<Game?>> GetUsersLibrary(int userId)
     {
+        if(userId <= 0)
+        {
+            throw new ArgumentException("userId is zero or below");
+        }
+        
         return await repository.GetAllUsersGames(userId);
     }
 

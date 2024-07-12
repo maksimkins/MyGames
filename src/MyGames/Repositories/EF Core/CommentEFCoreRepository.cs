@@ -50,4 +50,9 @@ public class CommentEFCoreRepository : ICommentRepository
     {
         return dbContext.Comments.Where(c => c.GameId == gameId);
     }
+
+    public async Task<Comment?> GetByIdAsync(int id)
+    {
+        return await dbContext.Comments.FirstOrDefaultAsync(c => c.Id == id);
+    }
 }

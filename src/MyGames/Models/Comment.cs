@@ -20,5 +20,8 @@ namespace MyGames.Models;
         public DateTime? ChangeDate{set; get;}
         [Range(0, 5), Required]
         public float Rate{set; get;} = 0;
+        [ForeignKey("UserId"), Required]
+        public int? UserId { get; set; }
+        public User? User { get; set; }
     }
     

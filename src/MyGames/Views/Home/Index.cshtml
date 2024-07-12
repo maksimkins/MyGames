@@ -1,8 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var username = base.User.Claims.Where(c => c.Type == "username").FirstOrDefault()?.Value;
+    var userId = base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value;
+    var IsAuthenticated = base.User.Identity?.IsAuthenticated ?? false;
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome, @username</h1>
+    <p>Get to the <a asp-action="Index" asp-controller="Game">Shop</a>.</p>
 </div>

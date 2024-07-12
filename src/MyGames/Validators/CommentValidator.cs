@@ -22,5 +22,9 @@ public class CommentValidator : AbstractValidator<Comment>
         RuleFor<int?>((c) => c.GameId)
             .NotNull()
             .Must(id => id > 0);
+        
+        RuleFor<int?>((c) => c.UserId)
+            .NotNull()
+            .Must(id => id > 0);
     }
 }

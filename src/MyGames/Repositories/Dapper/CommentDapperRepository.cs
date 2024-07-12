@@ -59,5 +59,10 @@ namespace MyGames.Repositories.Dapper
 
             return comments;
         }
+
+        public Task<Comment?> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

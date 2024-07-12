@@ -1,5 +1,6 @@
 using System.Reflection;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using MyGames.Middlewares;
 using MyGames.Models;
 using MyGames.Options;
@@ -19,8 +20,14 @@ builder.Services.AddDbContext<MyGamesDbContext>();
 builder.Services.AddScoped<IGameRepository, GameEFCoreRepository>();
 builder.Services.AddScoped<IGameService, GameService>();
 
+builder.Services.AddScoped<IUserRepository, UserEFCoreRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddScoped<ICommentRepository, CommentEFCoreRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+
+builder.Services.AddScoped<IUserRepository, UserEFCoreRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<ILogRepository, LogDapperRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
@@ -32,6 +39,12 @@ builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 var connectionStringSection = builder.Configuration.GetSection("connections:MsSql");
 builder.Services.Configure<MsSqlconnectionOptions>(connectionStringSection);
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Identity/Login";
+    });
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -39,6 +52,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<LogMiddleware>();

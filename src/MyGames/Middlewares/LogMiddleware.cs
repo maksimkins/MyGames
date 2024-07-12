@@ -15,7 +15,7 @@ namespace MyGames.Middlewares
         public LogMiddleware(ILogService service, IConfiguration configuration) 
         {
             this.service = service;
-            isLogging = configuration.GetSection("GeneralOptions:isLogging")?.Get<bool>() is null ? false: true;
+            isLogging = configuration.GetSection("GeneralOptions:isLogging")?.Get<bool>() ?? false;
         }
 
         public bool isLogging { get; set; }

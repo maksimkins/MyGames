@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyGames.Models;
 using MyGames.Services.Base;
 
 namespace MyGames.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class CommentController : Controller
     {
@@ -21,7 +24,8 @@ namespace MyGames.Controllers
             this.validator = validator;
         }
 
-        [HttpGet("{gameid}")]
+        [AllowAnonymous]
+        [HttpGet("/api/[controller]/{gameid}")]
         public async Task<IActionResult> GetComments(int gameId) 
         {
             try
@@ -36,7 +40,7 @@ namespace MyGames.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("/api/[controller]")] 
         public async Task<IActionResult> CreateComment([FromBody]Comment comment) 
         {
             try
@@ -47,7 +51,7 @@ namespace MyGames.Controllers
                 {
                     foreach(var error in result.Errors)
                     {
-                        base.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                        base.ModelState.AddModelError("All", error.ErrorMessage);
                     }
                     return BadRequest();
                 }
@@ -61,7 +65,7 @@ namespace MyGames.Controllers
             }
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("/api/[controller]/{Id}")]
         public async Task<IActionResult> DeleteComment(int Id)
         {
             try
@@ -71,8 +75,13 @@ namespace MyGames.Controllers
                     Id = Id
                 };
 
-                await service.DeleteCommentAsync(comment);
+                Int32.TryParse(base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value, out int userId);
+                await service.DeleteCommentAsync(userId, comment);
                 return Ok();
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(error: ex.Message);
             }
             catch(Exception ex)
             {
@@ -80,7 +89,7 @@ namespace MyGames.Controllers
             }
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("/api/[controller]/{Id}")]
         public async Task<IActionResult> Put([FromBody]Comment comment, int Id)
         {
             try
@@ -96,9 +105,14 @@ namespace MyGames.Controllers
                     return BadRequest();
                 }
                 
-                await service.ChangeCommentAsync(Id, comment);
+                Int32.TryParse(base.User.Claims.Where(c => c.Type == "id").FirstOrDefault()?.Value, out int userId);
+                await service.ChangeCommentAsync(userId, Id, comment);
 
                 return Ok();
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(error: ex.Message);
             }
             catch(Exception ex)
             {

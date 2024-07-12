@@ -17,7 +17,7 @@
                     <p class="card-text">@game.Description</p>
                     <li class="list-group-item mb-2">@game.Price $</li>
                   </div>
-                  <a href="/Comment/@(game.Id)" class="btn btn-primary">See Comments</a>
+                  <a asp-action="GetComments" asp-route-gameId="@(game.Id)" asp-controller="Comment" class="btn btn-primary">See Comments</a> 
             </div>
         }
 

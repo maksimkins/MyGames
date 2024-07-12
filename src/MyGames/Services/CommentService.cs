@@ -32,12 +32,13 @@ namespace MyGames.Services
                 throw new ArgumentNullException(nameof(comment));
             }
 
+            comment.CreationDate = DateTime.Now;
             await repository.CreateAsync(comment);
         }
 
         public async Task DeleteCommentAsync(Comment comment)
         {
-            if (comment == null)
+            if (comment == null || comment.Id == null)
             {
                 throw new ArgumentNullException(nameof(comment));
             }

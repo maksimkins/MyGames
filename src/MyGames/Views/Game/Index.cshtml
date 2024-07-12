@@ -1,31 +1,26 @@
+@model IEnumerable<Game>;
 @{
     ViewData["Title"] = "Games";
-
-    var gamesStr = File.ReadAllText("../../src/MyGames/json/Games.json");
-    var games = JsonSerializer.Deserialize<IEnumerable<Game>>(gamesStr); 
-
 }
 
-<div class="index-game">
-    @if(games is not null)
-    foreach(var game in games){
-        <div class="game">
-            <div>name: "@game.Name"</div>
-            <div>price: "@game.Price"</div>
-            <br>
-        </div>
-    }
+<div class="index-container">
+   <div class="index d-flex justify-content-between">
+        @if(Model is null || !Model.Any()){
+            <div class="alert alert-danger" role="alert">
+                Sorry! There is no games(
+            </div>
+        }
+        else {
+            @foreach(var game in Model) {
+                <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">@game.Name</h5>
+                    <li class="list-group-item mb-2">@game.Price $</li>
+                    <a href="/Game/@(game.Id)" class="btn btn-primary">See Details</a>
+                  </div>
+                </div>
+            }
+        }
+   </div>
 </div>
 
-<form action="/Game" method="post">
-    <div>
-        <span>name: </span> <input type="text" name="Name">
-    </div>
-    
-    <div>
-        <span>price: </span> <input type="text" name="Price">
-    </div>
-
-    <button>Create</button>
-
-</form>

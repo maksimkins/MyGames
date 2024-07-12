@@ -1,0 +1,26 @@
+@model Game;
+@{
+    ViewData["Title"] = "GameInfo";
+    var game = Model;
+}
+<div class="game-info-container">
+   <div class="game-info d-flex">
+        @if(Model is null){
+            <div class="alert alert-danger" role="alert">
+                Sorry! There is no details info about this game(
+            </div>
+        }
+        else {
+            <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">@game.Name</h5>
+                    <p class="card-text">@game.Description</p>
+                    <li class="list-group-item mb-2">@game.Price $</li>
+                  </div>
+                  <a href="/Comment/@(game.Id)" class="btn btn-primary">See Comments</a>
+            </div>
+        }
+
+        
+   </div>
+</div>

@@ -1,4 +1,6 @@
+using MyGames.Middlewares;
 using MyGames.Models;
+using MyGames.Options;
 using MyGames.Repositories.Base;
 using MyGames.Repositories.Dapper;
 using MyGames.Services;
@@ -10,14 +12,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IGameRepository, GameDapperRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentDapperRepository>();
-
 builder.Services.AddScoped<IGameService, GameService>();
+
+builder.Services.AddScoped<ICommentRepository, CommentDapperRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 
-var app = builder.Build();
+builder.Services.AddScoped<ILogRepository, LogDapperRepository>();
+builder.Services.AddScoped<ILogService, LogService>();
 
-// Configure the HTTP request pipeline.
+builder.Services.AddScoped<LogMiddleware>();
+
+var connectionStringSection = builder.Configuration.GetSection("connections:MsSqlStep");
+builder.Services.Configure<MsSqlconnectionOptions>(connectionStringSection);
+
+var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -25,6 +33,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseMiddleware<LogMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

@@ -44,6 +44,6 @@ public class UserGameService : IUserGameService
             throw new ArgumentNullException("params are null, cannot check if user has particular game");
         }
 
-        return await repository.HasUserGame(user.Id, game.Id.Value); 
+        return await repository.HasUserGame(game.Id.Value, user.Id ); 
     }
 }

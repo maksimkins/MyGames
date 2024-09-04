@@ -17,44 +17,16 @@
     var userId = user?.Id;
 
     var games = Model.ToList();
-    var hasGameArr = new Dictionary<int, bool>();
-
-    foreach(var game in games)
-    {
-        var hasGame = userId is null ? false : await userGameService.HasUserGame(new User{Id = userId!.Value}, new Game{Id = game.Id});
-        hasGameArr.Add(game.Id!.Value ,hasGame);
-    }
 
     
 }
 
-<script>
-     function BuyGame(gameJsom) {
 
-    let game = JSON.parse(gameJsom);
-
-    fetch(`/api/Game/BuyGame/${game.Id}?userId=@userId`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8'
-      }
-    }).then((response) => {
-            if (!response.ok)
-                throw new Error(response.statusText);
-
-            let button = document.getElementById(`button-${game.Id}`);
-            button.style.display = 'none';
-
-            }).catch((err) => {
-          console.log(err.message);
-        });
-  }
-</script>
 
 
 <div>
 <header>
-    <h1>Games Shop</h1>
+    <h1>Games Library</h1>
 </header>
 <main>
     <div class="game-container">
@@ -66,10 +38,6 @@
                 <h2>@(game.Name)</h2>
                 <p>@(game.Description)</p>
                 <a asp-action="GameInfo" asp-route-gameId="@(game?.Id)" asp-controller="Game" class="buy-button">See page</a>
-                @if(IsAuthenticated && !hasGameArr[game!.Id!.Value])
-                {
-                  <button class="buy-button" id="button-@game.Id" onclick="BuyGame(`@JsonSerializer.Serialize(game)`)" >Buy Now</button> 
-                }
                 
             </div>
         }

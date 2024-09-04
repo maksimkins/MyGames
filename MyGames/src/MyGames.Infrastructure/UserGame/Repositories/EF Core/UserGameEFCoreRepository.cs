@@ -29,6 +29,6 @@ public class UserGameEFCoreRepository : IUserGameRepository
 
     public async Task<bool> HasUserGame(int gameId, int userId)
     {
-        return dbContext.UserGames.Any(ug => ug.UserId == userId && ug.GameId == gameId);
+        return dbContext.UserGames.AsNoTracking().Where(ug => ug.UserId == userId && ug.GameId == gameId).Count() != 0;
     }
 }

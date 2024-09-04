@@ -17,7 +17,7 @@ public class RegistrationValidator : AbstractValidator<RegistrationDto>
 
         RuleFor<string?>((u) => u.Username)
             .NotEmpty().WithMessage("Your username cannot be empty.")
-            .MinimumLength(5).WithMessage("Your password length must be at least 5.")
+            .MinimumLength(5).WithMessage("Your username length must be at least 5.")
             .MaximumLength(18).WithMessage("Your username length must not exceed 18.");
 
         RuleFor<string?>((u) => u.Password)

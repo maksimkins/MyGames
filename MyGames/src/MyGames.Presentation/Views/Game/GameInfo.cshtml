@@ -1,7 +1,11 @@
 @using MyGames.Core.Game.Models;
 @using MyGames.Core.User.Models;
+@using MyGames.Core.UserGame.Services.Base
 
 @inject UserManager<User> userManager
+@inject IUserGameService userGameService;
+
+
 
 @model Game;
 @{
@@ -13,7 +17,43 @@
     var userName =  User.FindFirstValue(ClaimTypes.Name);
     User? user = IsAuthenticated ? await userManager.FindByNameAsync(userName!) : null;
     var userId = user?.Id;
+
+    bool hasGame = false; 
+
+    if(userId is not null)
+    {
+      try{
+        hasGame = await userGameService.HasUserGame(new User{Id = userId.Value}, new Game{Id = game.Id});
+      }
+      catch
+      {
+        
+      }
+    }
 }
+
+<script>
+     function BuyGame(gameJsom) {
+
+    let game = JSON.parse(gameJsom);
+
+    fetch(`/api/Game/BuyGame/${game.Id}?userId=@userId`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    }).then((response) => {
+            if (!response.ok)
+                throw new Error(response.statusText);
+
+            let button = document.getElementById(`button-${game.Id}`);
+            button.style.display = 'none';
+
+            }).catch((err) => {
+          console.log(err.message);
+        });
+  }
+  </script>
 
 @if(game is null){
     <div class="alert alert-danger" role="alert">
@@ -26,9 +66,9 @@ else{
         <h2>@game.Name</h2>  
         <p>Release Date: @(game.CreationDate.HasValue ? game.CreationDate.Value.Date : 0)</p>  
         <p>Description: @game.Description</p>  
-        @if(IsAuthenticated)
+        @if(IsAuthenticated && !hasGame)
         {
-          <button class="buy-button">Buy Now</button> 
+          <button class="buy-button" id="button-@game.Id" onclick="BuyGame(`@JsonSerializer.Serialize(game)`)" >Buy Now</button>
         }
         <a asp-action="GetComments" asp-route-gameId="@(game?.Id)" asp-controller="Comment" class="btn btn-primary">See Comments</a> 
         </div>  

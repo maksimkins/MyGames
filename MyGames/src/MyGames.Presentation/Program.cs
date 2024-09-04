@@ -30,6 +30,10 @@ using FluentValidation;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using MyGames.Core.UserGame.Repositories.Base;
+using MyGames.Core.UserGame.Services.Base;
+using MyGames.Infrastructure.UserGame.Services;
+using MyGames.Infrastructure.UserGame.Repositories.Ef_Core;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,6 +51,9 @@ builder.Services.AddScoped<IGameService, GameService>();
 
 builder.Services.AddScoped<ICommentRepository, CommentEFCoreRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+
+builder.Services.AddScoped<IUserGameRepository, UserGameEFCoreRepository>();
+builder.Services.AddScoped<IUserGameService, UserGameService>();
 
 builder.Services.AddScoped<ILogRepository, LogDapperRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
@@ -85,6 +92,9 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
+
+// app.UseSwagger();
+// app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

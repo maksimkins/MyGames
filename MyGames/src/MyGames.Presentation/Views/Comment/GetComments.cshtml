@@ -9,6 +9,7 @@
     var IsAuthenticated = base.User.Identity?.IsAuthenticated ?? false;
     var isDeveloper = base.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value == "Developer";
     var userName =  User.FindFirstValue(ClaimTypes.Name);
+    var IsMuted =  User.Claims.FirstOrDefault(c => c.Type == "IsMuted")?.Value == "True";
     User? user = IsAuthenticated ? await userManager.FindByNameAsync(userName!) : null;
     var userId = user?.Id;
 
@@ -210,7 +211,8 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li>
 
-                        <form onsubmit="return false;" id="form-@comment?.Id">
+
+                          <form onsubmit="return false;" id="form-@comment?.Id">
                           <legend>Change the comment</legend>
                             <div class="mb-3">
                               <label hidden for="disabledTextInput" class="form-label">GameId</label>
@@ -234,6 +236,8 @@
 
                         <button onclick="PutComment(`form-@comment?.Id`)" type="submit" class="btn btn-primary">Change comment</button>
                       </form>
+                        
+
 
                         </li>
                      </ul>
@@ -249,11 +253,11 @@
         }
 
         
-   @if(base.User?.Identity?.IsAuthenticated ?? false)
+   @if( (base.User?.Identity?.IsAuthenticated ?? false) && !IsMuted)
    {
 
     <div class="comment-section">  
-      <h2 class="comment-header">Leave a Comment</h2>  
+      <h2 class="comment-header">Leave a Comment @IsMuted</h2>  
       <form id="comment-post-form" onsubmit="return false;">  
         <label hidden for="disabledTextInput" class="form-label">GameId</label>
         <input hidden name="GameId" type="text" value="@(gameId is null ? "error" : (int)gameId)">

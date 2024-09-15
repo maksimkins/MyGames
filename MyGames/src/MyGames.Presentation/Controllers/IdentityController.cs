@@ -12,6 +12,10 @@ using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using MyGames.Core.Role.Enums;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 public class IdentityController : Controller
 {
@@ -60,8 +64,16 @@ public class IdentityController : Controller
 
         if(user == null) 
         {
-            System.Console.WriteLine($"{loginDto.Password}");
             base.TempData["error"] = "Incorrect login or password!";
+            return base.RedirectToRoute("LoginView", new
+            {
+                ReturnUrl = loginDto.ReturnUrl,
+            });
+        }
+
+        if (user.IsBanned)
+        {
+            base.TempData["error"] = "Account is banned!";
             return base.RedirectToRoute("LoginView", new
             {
                 ReturnUrl = loginDto.ReturnUrl,
@@ -72,7 +84,21 @@ public class IdentityController : Controller
 
         if(result.Succeeded)
         {
-            await userManager.AddToRoleAsync(user, "User");
+            await userManager.AddToRoleAsync(user, UserRoles.User.ToString());
+
+                  // Check if the user is muted (you can decide how to set this, for example based on user properties)
+            bool isMuted = user.IsMuted; // Assuming you have a property 'IsMuted' in your user model
+
+
+            var claims = await userManager.GetClaimsAsync(user);
+            var isMutedClaim = claims.FirstOrDefault(c => c.Type == "IsMuted");
+        
+            if (isMutedClaim == null)
+            {
+                await userManager.AddClaimAsync(user, new Claim("IsMuted", isMuted.ToString()));
+            }
+
+            await signInManager.RefreshSignInAsync(user);
 
             return string.IsNullOrWhiteSpace(loginDto.ReturnUrl) == false 
                 ? base.Redirect(loginDto.ReturnUrl) 
@@ -118,12 +144,11 @@ public class IdentityController : Controller
             {
                 throw new Exception();
             }
-            if(!await roleManager.RoleExistsAsync("User"))
-                    await roleManager.CreateAsync(new Role()
-                    {
-                        Name = "User",
-                    });
+  
             await userManager.AddToRoleAsync(user, "User");
+
+
+            
             return base.RedirectToRoute("LoginView");
         }
         catch(Exception)

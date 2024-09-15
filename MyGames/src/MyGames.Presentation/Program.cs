@@ -34,6 +34,11 @@ using MyGames.Core.UserGame.Repositories.Base;
 using MyGames.Core.UserGame.Services.Base;
 using MyGames.Infrastructure.UserGame.Services;
 using MyGames.Infrastructure.UserGame.Repositories.Ef_Core;
+using MyGames.Core.Role.Services;
+using MyGames.Infrastructure.Roles.Services;
+using MyGames.Core.Common.Admin.Services;
+using MyGames.Infrastructure.Common.Admin.Services;
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -54,6 +59,9 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 
 builder.Services.AddScoped<IUserGameRepository, UserGameEFCoreRepository>();
 builder.Services.AddScoped<IUserGameService, UserGameService>();
+
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Services.AddScoped<ILogRepository, LogDapperRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
@@ -87,14 +95,52 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("MyPolicy", policyBuilder =>
     {
         policyBuilder.RequireClaim(ClaimTypes.Role, "User", "Developer", "Admin");
+        policyBuilder.RequireAuthenticatedUser();
+        policyBuilder.RequireClaim("IsMuted", "False");
     });
 
 });
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("cookieAuth", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Cookie,
+        Name = "YourCookieName",
+        Scheme = "cookieAuth",
+        Description = "Authorization using a cookie scheme"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "cookieAuth"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+
+
+
 var app = builder.Build();
 
-// app.UseSwagger();
-// app.UseSwaggerUI();
+using (var scope = app.Services.CreateScope())
+{
+    var roleService = scope.ServiceProvider.GetRequiredService<IRoleService>();
+    await roleService.SetupRolesAsync();
+}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

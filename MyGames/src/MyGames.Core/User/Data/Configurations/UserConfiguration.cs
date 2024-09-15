@@ -12,5 +12,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder
             .Property(c => c.Birthdate)
             .IsRequired();
+
+        builder
+            .Property(c => c.IsMuted)
+            .IsRequired();
+
+        builder
+            .Property(c => c.IsBanned)
+            .IsRequired();
     }
 }

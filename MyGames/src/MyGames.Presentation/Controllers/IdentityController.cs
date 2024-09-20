@@ -145,7 +145,7 @@ public class IdentityController : Controller
                 throw new Exception();
             }
   
-            await userManager.AddToRoleAsync(user, "User");
+            await userManager.AddToRoleAsync(user, "Admin");
 
 
             

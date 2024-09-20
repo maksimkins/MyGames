@@ -20,9 +20,13 @@ public class MsSqlConnectionOptions : IConnectionStringOption
     }
 
     public string? Server { get; set; }
+    public string? Initial_Catalog { get; set; }
+    public string? Persist_Security_Info { get; set; }
     public string? Database { get; set; }
     public string? User_Id { get; set; }
     public string? Password { get; set; }
     public bool? Trusted_Connection { get; set; }
     public bool? TrustServerCertificate { get; set; }
+    public bool? Encrypt { get; set; }
+    public int? Connection_Timeout { get; set; }
 }

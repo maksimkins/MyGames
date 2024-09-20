@@ -108,7 +108,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Type = SecuritySchemeType.ApiKey,
         In = ParameterLocation.Cookie,
-        Name = "YourCookieName",
+        Name = "AspIdentityCookie",
         Scheme = "cookieAuth",
         Description = "Authorization using a cookie scheme"
     });

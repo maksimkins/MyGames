@@ -12,8 +12,8 @@ using MyGames.Infrastructure.Data.DbContext;
 namespace MyGames.Infrastructure.Migrations
 {
     [DbContext(typeof(MyGamesDbContext))]
-    [Migration("20240710195108_GetDbToInfrastructure")]
-    partial class GetDbToInfrastructure
+    [Migration("20240920181719_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -310,6 +310,12 @@ namespace MyGames.Infrastructure.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMuted")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")

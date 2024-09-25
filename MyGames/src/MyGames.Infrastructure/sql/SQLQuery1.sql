@@ -2,7 +2,6 @@ use MyGamesDb;
 
 select * from UserRoles;
 
-insert into Roles(Name) values ('User'), ('Developer'), ('Admin')
 
 delete from Users;
 
@@ -14,7 +13,7 @@ delete from Users;
  --(3, 'bad', 'bad game!!', 2.5, '2019-05-20'),
  --(2, 'bad', 'bad game!!', 1.5, '2020-05-20')
 
- use MyGamesDb;
+use MyGamesDb;
 
 select * from AspNetUsers;
 
@@ -35,6 +34,6 @@ insert into Games(Rate, Name, Description, Price, CreationDate, ForAdultsOnly, P
  (2,'Grand Theft Auto V', 'Grand Theft Auto V для PC позволяет игрокам исследовать знаменитый мир Лос-Сантоса и округа Блэйн в разрешении до 4k и выше с частотой 60 кадров в секунду.', 15, '2011-05-20', 0, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg?t=1716224849'),
  (1,'Sid Meier’s Civilization VI', 'Сыграйте за одного из 20 лидеров – например за Петра Великого, российского императора.', 15, '2011-05-20', 0, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/289070/header.jpg?t=1719520634')
 
-  delete from Games;
+delete from Games;
 
 select * from Games;
